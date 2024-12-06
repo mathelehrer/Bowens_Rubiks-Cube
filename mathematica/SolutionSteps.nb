@@ -1,0 +1,1808 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     83452,       1800]
+NotebookOptionsPosition[     79593,       1727]
+NotebookOutlinePosition[     80027,       1744]
+CellTagsIndexPosition[     79984,       1741]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Import Utilities Notebook", "Section",
+ CellChangeTimes->{{3.94247976163282*^9, 
+  3.942479781592716*^9}},ExpressionUUID->"93cdb6fd-402e-a949-a7e8-\
+c1275f97259b"],
+
+Cell["Evaluate initial cells only.", "Text",
+ CellChangeTimes->{{3.942479783816744*^9, 
+  3.9424797981313057`*^9}},ExpressionUUID->"0cdb0251-16e3-f34c-a254-\
+05198e667cb9"],
+
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<RubiksCube.nb\>\""}], 
+   ",", 
+   RowBox[{"EvaluationElements", "->", "Automatic"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.942479636716652*^9, 3.94247966834346*^9}, {
+  3.94247970103948*^9, 3.9424797035617294`*^9}, {3.942479758777975*^9, 
+  3.9424797594389706`*^9}},
+ CellLabel->"In[2]:=",ExpressionUUID->"25162f4a-08a6-844a-9b61-165842223330"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Solution Generation", "Section",
+ CellChangeTimes->{{3.9424798034500427`*^9, 3.9424798187936363`*^9}, {
+  3.9424807765106926`*^9, 
+  3.942480790878105*^9}},ExpressionUUID->"a9166b14-5c9d-8a4a-9923-\
+b4d10ebde11c"],
+
+Cell[CellGroupData[{
+
+Cell["Initialization", "Subsection",
+ CellChangeTimes->{{3.9424807975849915`*^9, 
+  3.942480803495373*^9}},ExpressionUUID->"78de8410-04d4-9549-9404-\
+c1f313748944"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"colors", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "White", ",", "Yellow", ",", "Blue", ",", "Red", ",", "Orange", ",", 
+     "Green"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"faceIndices", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<T\>\"", ",", "\"\<L\>\"", ",", "\"\<F\>\"", ",", "\"\<R\>\"", ",", 
+     "\"\<B\>\"", ",", "\"\<D\>\""}], "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.942480417156296*^9, 3.942480417311706*^9}, {
+  3.9424810891244984`*^9, 3.9424810897112484`*^9}},
+ CellLabel->"In[16]:=",ExpressionUUID->"5f690376-465a-b844-81ac-164b81928d3b"],
+
+Cell[TextData[{
+ "Generate a valid state using ",
+ StyleBox["randomState.",
+  FontWeight->"Bold"]
+}], "Text",
+ CellChangeTimes->{{3.942479822784092*^9, 
+  3.94247985451182*^9}},ExpressionUUID->"7d4f0e81-24f2-3c4c-92f2-\
+46cf5cf9b3a9"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"validState", "=", 
+   RowBox[{"randomState", "[", 
+    RowBox[{"0", ",", 
+     RowBox[{"\"\<Color\>\"", "->", "colors"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.942479837878023*^9, 3.942479848992312*^9}, {
+  3.942480421017242*^9, 3.9424804219754105`*^9}, {3.9424810820945873`*^9, 
+  3.942481087744589*^9}},
+ CellLabel->"In[18]:=",ExpressionUUID->"67330c57-4ea7-5f44-ac6f-104c61b27227"],
+
+Cell["Generate an invalid (likely) state by random permutation.", "Text",
+ CellChangeTimes->{{3.9424798592665424`*^9, 
+  3.942479883576189*^9}},ExpressionUUID->"5ae57e0b-07b5-3043-b728-\
+904364e93249"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["validState"], "Input",
+ CellChangeTimes->{{3.94247990296961*^9, 3.9424799037362423`*^9}},
+ CellLabel->"In[43]:=",ExpressionUUID->"14163406-fa4f-b54d-8d5e-e5492f0fe368"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"T\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"L\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"F\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"R\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"B\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"D\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{3.942479903982935*^9, 3.942480424052368*^9},
+ CellLabel->"Out[43]=",ExpressionUUID->"632c7eb3-01bc-9242-8bce-fc5e18cb0def"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SeedRandom", "[", "0", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"invalidState", "=", 
+  RowBox[{"Association", "@", 
+   RowBox[{"MapThread", "[", 
+    RowBox[{"Rule", ",", 
+     RowBox[{"{", 
+      RowBox[{"faceIndices", ",", 
+       RowBox[{"Partition", "[", 
+        RowBox[{
+         RowBox[{"RandomSample", "[", 
+          RowBox[{"Catenate", "[", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"ConstantArray", "[", 
+              RowBox[{"#", ",", "9"}], "]"}], "&"}], "/@", "colors"}], "]"}], 
+          "]"}], ",", "9"}], "]"}]}], "}"}]}], "]"}]}]}]}], "Input",
+ CellChangeTimes->{{3.942479890381605*^9, 3.9424800115214996`*^9}, {
+   3.942480062171934*^9, 3.9424800745850697`*^9}, {3.942480409085964*^9, 
+   3.9424804260306683`*^9}, 3.9424806633996315`*^9},
+ CellLabel->"In[57]:=",ExpressionUUID->"16ce3fdb-353a-1647-b747-bd366e4f5123"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"T\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"L\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"F\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"R\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"B\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"D\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{
+  3.9424798954852276`*^9, 3.942479971683796*^9, 3.942480012822773*^9, {
+   3.9424800693141384`*^9, 3.942480076352804*^9}, 3.9424804264828796`*^9, 
+   3.942480664809992*^9},
+ CellLabel->"Out[58]=",ExpressionUUID->"4b9982c3-7f76-f74d-b297-4badadf2728a"]
+}, Open  ]],
+
+Cell["Visualize two Rubik\[CloseCurlyQuote]s Cubes:", "Text",
+ CellChangeTimes->{{3.9424800152427273`*^9, 
+  3.9424800306330338`*^9}},ExpressionUUID->"d728b4c3-a09b-aa4e-b356-\
+e5d2ed47b2e3"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Graphics3D", "[", 
+    RowBox[{
+     RowBox[{"rubiksCube", "[", "#", "]"}], ",", 
+     RowBox[{"Lighting", "->", "\"\<Neutral\>\""}], ",", 
+     RowBox[{"Boxed", "->", "False"}], ",", 
+     RowBox[{"ImageSize", "->", "Automatic"}]}], "]"}], "&"}], "/@", 
+  RowBox[{"{", 
+   RowBox[{"validState", ",", "invalidState"}], "}"}]}]], "Input",
+ CellChangeTimes->{{3.942480031875746*^9, 3.942480114327383*^9}, 
+   3.9424806671274357`*^9},
+ CellLabel->"In[59]:=",ExpressionUUID->"3683d990-f2ab-7b47-bb9a-3a7d5e0299a2"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   Graphics3DBox[{{
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}}, {{-1.5, -1.5, 
+         1.5}, {-0.5, -1.5, 1.5}, {-0.5, -0.5, 1.5}, {-1.5, -0.5, 1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}}, {{-1.5, -0.5, 
+         1.5}, {-0.5, -0.5, 1.5}, {-0.5, 0.5, 1.5}, {-1.5, 0.5, 1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[3, 2]}}, {{-1.5, 0.5, 
+         1.5}, {-0.5, 0.5, 1.5}, {-0.5, 1.5, 1.5}, {-1.5, 1.5, 1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}}, {{-0.5, -1.5, 
+         1.5}, {0.5, -1.5, 1.5}, {0.5, -0.5, 1.5}, {-0.5, -0.5, 1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}}, {{-0.5, -0.5, 
+         1.5}, {0.5, -0.5, 1.5}, {0.5, 0.5, 1.5}, {-0.5, 0.5, 1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}}, {{-0.5, 0.5, 
+         1.5}, {0.5, 0.5, 1.5}, {0.5, 1.5, 1.5}, {-0.5, 1.5, 1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}}, {{0.5, -1.5, 
+         1.5}, {1.5, -1.5, 1.5}, {1.5, -0.5, 1.5}, {0.5, -0.5, 1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}}, {{0.5, -0.5, 
+         1.5}, {1.5, -0.5, 1.5}, {1.5, 0.5, 1.5}, {0.5, 0.5, 1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}}, {{0.5, 0.5, 
+         1.5}, {1.5, 0.5, 1.5}, {1.5, 1.5, 1.5}, {0.5, 1.5, 1.5}}]]}}, {
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}}, {{-1.5, -1.5, 
+         1.5}, {-0.5, -1.5, 1.5}, {-0.5, -1.5, 0.5}, {-1.5, -1.5, 0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}}, {{-0.5, -1.5, 
+         1.5}, {0.5, -1.5, 1.5}, {0.5, -1.5, 0.5}, {-0.5, -1.5, 0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}}, {{0.5, -1.5, 
+         1.5}, {1.5, -1.5, 1.5}, {1.5, -1.5, 0.5}, {0.5, -1.5, 0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}}, {{-1.5, -1.5, 
+         0.5}, {-0.5, -1.5, 0.5}, {-0.5, -1.5, -0.5}, {-1.5, -1.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}}, {{-0.5, -1.5, 
+         0.5}, {0.5, -1.5, 0.5}, {0.5, -1.5, -0.5}, {-0.5, -1.5, -0.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}}, {{0.5, -1.5, 
+         0.5}, {1.5, -1.5, 0.5}, {1.5, -1.5, -0.5}, {0.5, -1.5, -0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -0.5}, {-0.5, -1.5, -0.5}, {-0.5, -1.5, \
+-1.5}, {-1.5, -1.5, -1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], 
+           Rational[-3, 2]}}, {{-0.5, -1.5, -0.5}, {0.5, -1.5, -0.5}, {
+         0.5, -1.5, -1.5}, {-0.5, -1.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}}, {{
+         0.5, -1.5, -0.5}, {1.5, -1.5, -0.5}, {1.5, -1.5, -1.5}, {
+         0.5, -1.5, -1.5}}]]}}, {
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}}, {{1.5, -1.5, 
+         0.5}, {1.5, -1.5, 1.5}, {1.5, -0.5, 1.5}, {1.5, -0.5, 0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}}, {{1.5, -0.5, 
+         0.5}, {1.5, -0.5, 1.5}, {1.5, 0.5, 1.5}, {1.5, 0.5, 0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}}, {{1.5, 0.5, 
+         0.5}, {1.5, 0.5, 1.5}, {1.5, 1.5, 1.5}, {1.5, 1.5, 0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}}, {{
+         1.5, -1.5, -0.5}, {1.5, -1.5, 0.5}, {1.5, -0.5, 0.5}, {
+         1.5, -0.5, -0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}}, {{
+         1.5, -0.5, -0.5}, {1.5, -0.5, 0.5}, {1.5, 0.5, 0.5}, {1.5, 
+         0.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}}, {{1.5, 
+         0.5, -0.5}, {1.5, 0.5, 0.5}, {1.5, 1.5, 0.5}, {1.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}}, {{
+         1.5, -1.5, -1.5}, {1.5, -1.5, -0.5}, {1.5, -0.5, -0.5}, {
+         1.5, -0.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}}, {{
+         1.5, -0.5, -1.5}, {1.5, -0.5, -0.5}, {1.5, 0.5, -0.5}, {1.5, 
+         0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}}, {{1.5, 
+         0.5, -1.5}, {1.5, 0.5, -0.5}, {1.5, 1.5, -0.5}, {1.5, 
+         1.5, -1.5}}]]}}, {
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}}, {{0.5, 1.5, 
+         1.5}, {1.5, 1.5, 1.5}, {1.5, 1.5, 0.5}, {0.5, 1.5, 0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}}, {{-0.5, 1.5, 
+         1.5}, {0.5, 1.5, 1.5}, {0.5, 1.5, 0.5}, {-0.5, 1.5, 0.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}}, {{-1.5, 1.5, 
+         1.5}, {-0.5, 1.5, 1.5}, {-0.5, 1.5, 0.5}, {-1.5, 1.5, 0.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}}, {{0.5, 1.5, 
+         0.5}, {1.5, 1.5, 0.5}, {1.5, 1.5, -0.5}, {0.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}}, {{-0.5, 1.5, 
+         0.5}, {0.5, 1.5, 0.5}, {0.5, 1.5, -0.5}, {-0.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}}, {{-1.5, 1.5, 
+         0.5}, {-0.5, 1.5, 0.5}, {-0.5, 1.5, -0.5}, {-1.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}}, {{0.5, 
+         1.5, -0.5}, {1.5, 1.5, -0.5}, {1.5, 1.5, -1.5}, {0.5, 1.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}}, {{-0.5, 
+         1.5, -0.5}, {0.5, 1.5, -0.5}, {0.5, 1.5, -1.5}, {-0.5, 
+         1.5, -1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         1.5, -0.5}, {-0.5, 1.5, -0.5}, {-0.5, 1.5, -1.5}, {-1.5, 
+         1.5, -1.5}}]]}}, {
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}}, {{-1.5, 0.5, 
+         0.5}, {-1.5, 0.5, 1.5}, {-1.5, 1.5, 1.5}, {-1.5, 1.5, 0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}}, {{-1.5, -0.5, 
+         0.5}, {-1.5, -0.5, 1.5}, {-1.5, 0.5, 1.5}, {-1.5, 0.5, 0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}}, {{-1.5, -1.5, 
+         0.5}, {-1.5, -1.5, 1.5}, {-1.5, -0.5, 1.5}, {-1.5, -0.5, 0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}}, {{-1.5, 
+         0.5, -0.5}, {-1.5, 0.5, 0.5}, {-1.5, 1.5, 0.5}, {-1.5, 
+         1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-1, 2]}}, {{-1.5, -0.5, -0.5}, {-1.5, -0.5, 0.5}, {-1.5, 
+         0.5, 0.5}, {-1.5, 0.5, -0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-1, 2]}}, {{-1.5, -1.5, -0.5}, {-1.5, -1.5, 
+         0.5}, {-1.5, -0.5, 0.5}, {-1.5, -0.5, -0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         0.5, -1.5}, {-1.5, 0.5, -0.5}, {-1.5, 1.5, -0.5}, {-1.5, 
+         1.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-1.5, -0.5, -1.5}, {-1.5, -0.5, -0.5}, {-1.5, 
+         0.5, -0.5}, {-1.5, 0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -1.5}, {-1.5, -1.5, -0.5}, {-1.5, -0.5, \
+-0.5}, {-1.5, -0.5, -1.5}}]]}}, {
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}}, {{
+         0.5, -1.5, -1.5}, {1.5, -1.5, -1.5}, {1.5, -0.5, -1.5}, {
+         0.5, -0.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}}, {{
+         0.5, -0.5, -1.5}, {1.5, -0.5, -1.5}, {1.5, 0.5, -1.5}, {0.5, 
+         0.5, -1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}}, {{0.5, 
+         0.5, -1.5}, {1.5, 0.5, -1.5}, {1.5, 1.5, -1.5}, {0.5, 1.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], 
+           Rational[-3, 2]}}, {{-0.5, -1.5, -1.5}, {0.5, -1.5, -1.5}, {
+         0.5, -0.5, -1.5}, {-0.5, -0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-0.5, -0.5, -1.5}, {0.5, -0.5, -1.5}, {0.5, 
+         0.5, -1.5}, {-0.5, 0.5, -1.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}}, {{-0.5, 
+         0.5, -1.5}, {0.5, 0.5, -1.5}, {0.5, 1.5, -1.5}, {-0.5, 
+         1.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -1.5}, {-0.5, -1.5, -1.5}, {-0.5, -0.5, \
+-1.5}, {-1.5, -0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-1.5, -0.5, -1.5}, {-0.5, -0.5, -1.5}, {-0.5, 
+         0.5, -1.5}, {-1.5, 0.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         0.5, -1.5}, {-0.5, 0.5, -1.5}, {-0.5, 1.5, -1.5}, {-1.5, 
+         1.5, -1.5}}]]}}},
+    Boxed->False,
+    ImageSize->Automatic,
+    Lighting->"Neutral"], ",", 
+   Graphics3DBox[{{
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}}, {{-1.5, -1.5, 
+         1.5}, {-0.5, -1.5, 1.5}, {-0.5, -0.5, 1.5}, {-1.5, -0.5, 1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}}, {{-1.5, -0.5, 
+         1.5}, {-0.5, -0.5, 1.5}, {-0.5, 0.5, 1.5}, {-1.5, 0.5, 1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[3, 2]}}, {{-1.5, 0.5, 
+         1.5}, {-0.5, 0.5, 1.5}, {-0.5, 1.5, 1.5}, {-1.5, 1.5, 1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}}, {{-0.5, -1.5, 
+         1.5}, {0.5, -1.5, 1.5}, {0.5, -0.5, 1.5}, {-0.5, -0.5, 1.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[3, 2]}}, {{-0.5, -0.5, 
+         1.5}, {0.5, -0.5, 1.5}, {0.5, 0.5, 1.5}, {-0.5, 0.5, 1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}}, {{-0.5, 0.5, 
+         1.5}, {0.5, 0.5, 1.5}, {0.5, 1.5, 1.5}, {-0.5, 1.5, 1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[3, 2]}}, {{0.5, -1.5, 
+         1.5}, {1.5, -1.5, 1.5}, {1.5, -0.5, 1.5}, {0.5, -0.5, 1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[3, 2]}}, {{0.5, -0.5, 
+         1.5}, {1.5, -0.5, 1.5}, {1.5, 0.5, 1.5}, {0.5, 0.5, 1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}}, {{0.5, 0.5, 
+         1.5}, {1.5, 0.5, 1.5}, {1.5, 1.5, 1.5}, {0.5, 1.5, 1.5}}]]}}, {
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}}, {{-1.5, -1.5, 
+         1.5}, {-0.5, -1.5, 1.5}, {-0.5, -1.5, 0.5}, {-1.5, -1.5, 0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}}, {{-0.5, -1.5, 
+         1.5}, {0.5, -1.5, 1.5}, {0.5, -1.5, 0.5}, {-0.5, -1.5, 0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}}, {{0.5, -1.5, 
+         1.5}, {1.5, -1.5, 1.5}, {1.5, -1.5, 0.5}, {0.5, -1.5, 0.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}}, {{-1.5, -1.5, 
+         0.5}, {-0.5, -1.5, 0.5}, {-0.5, -1.5, -0.5}, {-1.5, -1.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}}, {{-0.5, -1.5, 
+         0.5}, {0.5, -1.5, 0.5}, {0.5, -1.5, -0.5}, {-0.5, -1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}}, {{0.5, -1.5, 
+         0.5}, {1.5, -1.5, 0.5}, {1.5, -1.5, -0.5}, {0.5, -1.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -0.5}, {-0.5, -1.5, -0.5}, {-0.5, -1.5, \
+-1.5}, {-1.5, -1.5, -1.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], 
+           Rational[-3, 2]}}, {{-0.5, -1.5, -0.5}, {0.5, -1.5, -0.5}, {
+         0.5, -1.5, -1.5}, {-0.5, -1.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}}, {{
+         0.5, -1.5, -0.5}, {1.5, -1.5, -0.5}, {1.5, -1.5, -1.5}, {
+         0.5, -1.5, -1.5}}]]}}, {
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}}, {{1.5, -1.5, 
+         0.5}, {1.5, -1.5, 1.5}, {1.5, -0.5, 1.5}, {1.5, -0.5, 0.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}}, {{1.5, -0.5, 
+         0.5}, {1.5, -0.5, 1.5}, {1.5, 0.5, 1.5}, {1.5, 0.5, 0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}}, {{1.5, 0.5, 
+         0.5}, {1.5, 0.5, 1.5}, {1.5, 1.5, 1.5}, {1.5, 1.5, 0.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}}, {{
+         1.5, -1.5, -0.5}, {1.5, -1.5, 0.5}, {1.5, -0.5, 0.5}, {
+         1.5, -0.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}}, {{
+         1.5, -0.5, -0.5}, {1.5, -0.5, 0.5}, {1.5, 0.5, 0.5}, {1.5, 
+         0.5, -0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}}, {{1.5, 
+         0.5, -0.5}, {1.5, 0.5, 0.5}, {1.5, 1.5, 0.5}, {1.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}}, {{
+         1.5, -1.5, -1.5}, {1.5, -1.5, -0.5}, {1.5, -0.5, -0.5}, {
+         1.5, -0.5, -1.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}}, {{
+         1.5, -0.5, -1.5}, {1.5, -0.5, -0.5}, {1.5, 0.5, -0.5}, {1.5, 
+         0.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}}, {{1.5, 
+         0.5, -1.5}, {1.5, 0.5, -0.5}, {1.5, 1.5, -0.5}, {1.5, 
+         1.5, -1.5}}]]}}, {
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}}, {{0.5, 1.5, 
+         1.5}, {1.5, 1.5, 1.5}, {1.5, 1.5, 0.5}, {0.5, 1.5, 0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}}, {{-0.5, 1.5, 
+         1.5}, {0.5, 1.5, 1.5}, {0.5, 1.5, 0.5}, {-0.5, 1.5, 0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}}, {{-1.5, 1.5, 
+         1.5}, {-0.5, 1.5, 1.5}, {-0.5, 1.5, 0.5}, {-1.5, 1.5, 0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}}, {{0.5, 1.5, 
+         0.5}, {1.5, 1.5, 0.5}, {1.5, 1.5, -0.5}, {0.5, 1.5, -0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}}, {{-0.5, 1.5, 
+         0.5}, {0.5, 1.5, 0.5}, {0.5, 1.5, -0.5}, {-0.5, 1.5, -0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}}, {{-1.5, 1.5, 
+         0.5}, {-0.5, 1.5, 0.5}, {-0.5, 1.5, -0.5}, {-1.5, 1.5, -0.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}}, {{0.5, 
+         1.5, -0.5}, {1.5, 1.5, -0.5}, {1.5, 1.5, -1.5}, {0.5, 1.5, -1.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}}, {{-0.5, 
+         1.5, -0.5}, {0.5, 1.5, -0.5}, {0.5, 1.5, -1.5}, {-0.5, 
+         1.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         1.5, -0.5}, {-0.5, 1.5, -0.5}, {-0.5, 1.5, -1.5}, {-1.5, 
+         1.5, -1.5}}]]}}, {
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}}, {{-1.5, 0.5, 
+         0.5}, {-1.5, 0.5, 1.5}, {-1.5, 1.5, 1.5}, {-1.5, 1.5, 0.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}}, {{-1.5, -0.5, 
+         0.5}, {-1.5, -0.5, 1.5}, {-1.5, 0.5, 1.5}, {-1.5, 0.5, 0.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}}, {{-1.5, -1.5, 
+         0.5}, {-1.5, -1.5, 1.5}, {-1.5, -0.5, 1.5}, {-1.5, -0.5, 0.5}}]]}, 
+      {RGBColor[1, 0, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}}, {{-1.5, 
+         0.5, -0.5}, {-1.5, 0.5, 0.5}, {-1.5, 1.5, 0.5}, {-1.5, 
+         1.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-1, 2]}}, {{-1.5, -0.5, -0.5}, {-1.5, -0.5, 0.5}, {-1.5, 
+         0.5, 0.5}, {-1.5, 0.5, -0.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-1, 2]}}, {{-1.5, -1.5, -0.5}, {-1.5, -1.5, 
+         0.5}, {-1.5, -0.5, 0.5}, {-1.5, -0.5, -0.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         0.5, -1.5}, {-1.5, 0.5, -0.5}, {-1.5, 1.5, -0.5}, {-1.5, 
+         1.5, -1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-1.5, -0.5, -1.5}, {-1.5, -0.5, -0.5}, {-1.5, 
+         0.5, -0.5}, {-1.5, 0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-3, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], Rational[-1, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -1.5}, {-1.5, -1.5, -0.5}, {-1.5, -0.5, \
+-0.5}, {-1.5, -0.5, -1.5}}]]}}, {
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}}, {{
+         0.5, -1.5, -1.5}, {1.5, -1.5, -1.5}, {1.5, -0.5, -1.5}, {
+         0.5, -0.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}}, {{
+         0.5, -0.5, -1.5}, {1.5, -0.5, -1.5}, {1.5, 0.5, -1.5}, {0.5, 
+         0.5, -1.5}}]]}, 
+      {RGBColor[1, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[3, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}}, {{0.5, 
+         0.5, -1.5}, {1.5, 0.5, -1.5}, {1.5, 1.5, -1.5}, {0.5, 1.5, -1.5}}]]}, 
+      {RGBColor[0, 0, 1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], 
+           Rational[-3, 2]}}, {{-0.5, -1.5, -1.5}, {0.5, -1.5, -1.5}, {
+         0.5, -0.5, -1.5}, {-0.5, -0.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-0.5, -0.5, -1.5}, {0.5, -0.5, -1.5}, {0.5, 
+         0.5, -1.5}, {-0.5, 0.5, -1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}}, {{-0.5, 
+         0.5, -1.5}, {0.5, 0.5, -1.5}, {0.5, 1.5, -1.5}, {-0.5, 
+         1.5, -1.5}}]]}, 
+      {GrayLevel[1], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-3, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[-1, 2], 
+           Rational[-3, 
+            2]}}, {{-1.5, -1.5, -1.5}, {-0.5, -1.5, -1.5}, {-0.5, -0.5, \
+-1.5}, {-1.5, -0.5, -1.5}}]]}, 
+      {RGBColor[1, 0.5, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[-1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[1, 2], 
+           Rational[-3, 2]}}, {{-1.5, -0.5, -1.5}, {-0.5, -0.5, -1.5}, {-0.5, 
+         0.5, -1.5}, {-1.5, 0.5, -1.5}}]]}, 
+      {RGBColor[0, 1, 0], 
+       Polygon3DBox[
+        NCache[{{Rational[-3, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[1, 2], Rational[-3, 2]}, {
+          Rational[-1, 2], Rational[3, 2], Rational[-3, 2]}, {
+          Rational[-3, 2], Rational[3, 2], Rational[-3, 2]}}, {{-1.5, 
+         0.5, -1.5}, {-0.5, 0.5, -1.5}, {-0.5, 1.5, -1.5}, {-1.5, 
+         1.5, -1.5}}]]}}},
+    Boxed->False,
+    ImageSize->Automatic,
+    Lighting->"Neutral"]}], "}"}]], "Output",
+ CellChangeTimes->{{3.942480078481884*^9, 3.942480114701639*^9}, 
+   3.9424804284617367`*^9, 3.942480668292305*^9},
+ CellLabel->"Out[59]=",ExpressionUUID->"972ecce1-a56e-b84f-9dba-feac10e381ef"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Solve Valid State", "Subsection",
+ CellChangeTimes->{{3.942480766870344*^9, 
+  3.9424807721499405`*^9}},ExpressionUUID->"38e5476e-8ebb-f245-be00-\
+7dc428535008"],
+
+Cell["Generate the group element words of the valid state. ", "Text",
+ CellChangeTimes->{{3.942480189736809*^9, 
+  3.942480292681875*^9}},ExpressionUUID->"ed0c5463-fc53-b64c-bdf4-\
+02c6dc43628e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"sol", "=", 
+  RowBox[{"rubiksCubeSolve", "[", "validState", "]"}]}]], "Input",
+ CellChangeTimes->{{3.942480220229309*^9, 3.942480232488497*^9}, {
+  3.942480517400917*^9, 3.9424805179352207`*^9}},
+ CellLabel->"In[60]:=",ExpressionUUID->"0b8b202d-2efa-a442-a1da-5e658c89e952"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "\<\"L\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", "\<\"D\"\>", ",", "\<\"F\"\>", 
+   ",", "\<\"L\"\>", ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", "\<\"D\"\>", ",", "\<\"B\"\>", ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"R\"\>", ",", "\<\"D\"\>", ",", 
+   RowBox[{"-", "\<\"L\"\>"}], ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"F\"\>", ",", "\<\"L\"\>", ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", "\<\"R\"\>", ",", "\<\"R\"\>", 
+   ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"F\"\>", ",", "\<\"F\"\>", 
+   ",", "\<\"D\"\>", ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"F\"\>", ",", "\<\"R\"\>", 
+   ",", "\<\"T\"\>", ",", "\<\"F\"\>", ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"F\"\>", ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"F\"\>", ",", "\<\"R\"\>", 
+   ",", "\<\"B\"\>", ",", "\<\"D\"\>", ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"R\"\>", ",", "\<\"D\"\>", 
+   ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", "\<\"R\"\>", ",", "\<\"T\"\>", 
+   ",", "\<\"F\"\>", ",", "\<\"F\"\>", ",", "\<\"R\"\>", ",", "\<\"D\"\>", 
+   ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"B\"\>", ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"R\"\>", ",", "\<\"R\"\>", 
+   ",", "\<\"D\"\>", ",", "\<\"R\"\>", ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"F\"\>", ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"D\"\>"}], ",", "\<\"F\"\>", ",", "\<\"D\"\>", 
+   ",", "\<\"D\"\>", ",", "\<\"F\"\>", ",", "\<\"L\"\>", ",", "\<\"T\"\>", 
+   ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", 
+   RowBox[{"-", "\<\"T\"\>"}], ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", "\<\"D\"\>", ",", "\<\"L\"\>", 
+   ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", 
+   RowBox[{"-", "\<\"L\"\>"}], ",", "\<\"R\"\>", ",", "\<\"T\"\>", 
+   ",", "\<\"R\"\>", ",", "\<\"R\"\>", ",", 
+   RowBox[{"-", "\<\"L\"\>"}], ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", "\<\"D\"\>", ",", "\<\"L\"\>", 
+   ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"F\"\>"}], ",", "\<\"L\"\>", ",", "\<\"D\"\>", ",", 
+   RowBox[{"-", "\<\"L\"\>"}], ",", 
+   RowBox[{"-", "\<\"R\"\>"}], ",", "\<\"B\"\>", ",", "\<\"T\"\>", ",", 
+   RowBox[{"-", "\<\"B\"\>"}], ",", "\<\"L\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.94248023286195*^9, 3.9424804302419415`*^9, 3.942480518343895*^9, {
+   3.942480641298765*^9, 3.9424806699328136`*^9}},
+ CellLabel->"Out[60]=",ExpressionUUID->"e56c016d-34da-294d-a103-827500fcfee9"]
+}, Open  ]],
+
+Cell["\<\
+Apply the operation sequence above on the original Rubik\[CloseCurlyQuote]s \
+cube, you will get the current state:\
+\>", "Text",
+ CellChangeTimes->{{3.942480293971596*^9, 
+  3.942480335145233*^9}},ExpressionUUID->"0b5b4843-e752-5444-8122-\
+f6ed3953ef58"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"originalState", "=", 
+  RowBox[{"Association", "@", 
+   RowBox[{"MapThread", "[", 
+    RowBox[{"Rule", ",", 
+     RowBox[{"{", 
+      RowBox[{"faceIndices", ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ConstantArray", "[", 
+          RowBox[{"#", ",", "9"}], "]"}], "&"}], "/@", "colors"}]}], "}"}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.9424803376024*^9, 3.942480355463497*^9}, {
+  3.942480435664173*^9, 3.94248043696052*^9}},
+ CellLabel->"In[61]:=",ExpressionUUID->"e8b5d09a-61d0-0041-8e0f-616be1011426"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"T\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"L\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"F\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"R\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"B\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"D\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{
+  3.942480439149809*^9, {3.9424806429235954`*^9, 3.9424806717430344`*^9}},
+ CellLabel->"Out[61]=",ExpressionUUID->"6943ec92-2d4c-904f-bf97-569c34347020"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Fold", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"applyOperator", "[", 
+      RowBox[{"#1", ",", "#2"}], "]"}], "&"}], ",", "originalState", ",", 
+    "sol"}], "]"}], "==", "validState"}]], "Input",
+ CellChangeTimes->{{3.9424805435278034`*^9, 3.942480582695999*^9}, {
+  3.9424806475756607`*^9, 3.9424807101595325`*^9}},
+ CellLabel->"In[67]:=",ExpressionUUID->"b6612d38-cc60-b649-9a89-fd196c707120"],
+
+Cell[BoxData["True"], "Output",
+ CellChangeTimes->{{3.94248070602874*^9, 3.9424807105500145`*^9}},
+ CellLabel->"Out[67]=",ExpressionUUID->"26f2193c-ff15-eb42-8454-b528b8b0caef"]
+}, Open  ]],
+
+Cell["\<\
+So, if you want to solve the cube, just reverse the order of the operations \
+and invert each operation.\
+\>", "Text",
+ CellChangeTimes->{{3.9424804436968346`*^9, 
+  3.942480490920679*^9}},ExpressionUUID->"3c0a2cf2-3b83-8b48-b358-\
+452598676462"],
+
+Cell["A minus sign can invert the operation easily.", "Text",
+ CellChangeTimes->{{3.9424804962888107`*^9, 
+  3.942480512126663*^9}},ExpressionUUID->"2af44377-aa38-e04f-9a8a-\
+00e845df2593"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Fold", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"applyOperator", "[", 
+     RowBox[{"#1", ",", "#2"}], "]"}], "&"}], ",", "validState", ",", 
+   RowBox[{"Reverse", "[", 
+    RowBox[{"-", "sol"}], "]"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.9424807407915363`*^9, 3.9424807497673817`*^9}},
+ CellLabel->"In[69]:=",ExpressionUUID->"0056da57-4a42-d54e-b6a8-77e5c3385c74"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"T\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> GrayLevel[1]|>,
+       "GrayLevelColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"L\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"F\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 0, 1]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"R\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"B\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[1, 0.5, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}], ",", 
+   RowBox[{"\<\"D\"\>", "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"], ",", 
+      TemplateBox[<|"color" -> RGBColor[0, 1, 0]|>,
+       "RGBColorSwatchTemplate"]}], "}"}]}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{{3.942480744689415*^9, 3.942480750026457*^9}},
+ CellLabel->"Out[69]=",ExpressionUUID->"b16044d5-c4db-3548-b2ac-3529b0bd0434"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Test Invalid State", "Subsection",
+ CellChangeTimes->{{3.942480808694727*^9, 
+  3.9424808132941837`*^9}},ExpressionUUID->"415229d2-8406-844f-a793-\
+c541b9f87e9e"],
+
+Cell["\<\
+For invalid State, it is not possible to give a sequence of operations. \
+Nothing will return.\
+\>", "Text",
+ CellChangeTimes->{{3.9424807533753796`*^9, 3.9424807583275166`*^9}, {
+  3.942480815480278*^9, 3.942480832912653*^9}, {3.942480873622175*^9, 
+  3.94248088243816*^9}},ExpressionUUID->"4301e8e4-229d-204f-b800-\
+2fe22cfebf59"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"rubiksCubeSolve", "[", "invalidState", "]"}]], "Input",
+ CellChangeTimes->{{3.9424808352164536`*^9, 3.9424808424070206`*^9}},
+ CellLabel->"In[70]:=",ExpressionUUID->"a3fb2c65-f094-8441-a1c8-a8a4c4c55ada"],
+
+Cell[BoxData["\<\"Invalid State!\"\>"], "Print",
+ CellChangeTimes->{3.942480843580612*^9},
+ CellLabel->
+  "During evaluation of \
+In[70]:=",ExpressionUUID->"a40608c9-954f-934d-8fc5-83b82a23a2cf"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1428, 729.75},
+WindowMargins->{{0, Automatic}, {Automatic, 0}},
+Magnification:>1.3 Inherited,
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"51fa98cc-e885-7349-99eb-e8167f7e7a87"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 169, 3, 86, "Section",ExpressionUUID->"93cdb6fd-402e-a949-a7e8-c1275f97259b"],
+Cell[752, 27, 172, 3, 45, "Text",ExpressionUUID->"0cdb0251-16e3-f34c-a254-05198e667cb9"],
+Cell[927, 32, 476, 10, 36, "Input",ExpressionUUID->"25162f4a-08a6-844a-9b61-165842223330"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1440, 47, 219, 4, 86, "Section",ExpressionUUID->"a9166b14-5c9d-8a4a-9923-b4d10ebde11c"],
+Cell[CellGroupData[{
+Cell[1684, 55, 164, 3, 70, "Subsection",ExpressionUUID->"78de8410-04d4-9549-9404-c1f313748944"],
+Cell[1851, 60, 621, 15, 62, "Input",ExpressionUUID->"5f690376-465a-b844-81ac-164b81928d3b"],
+Cell[2475, 77, 234, 7, 45, "Text",ExpressionUUID->"7d4f0e81-24f2-3c4c-92f2-46cf5cf9b3a9"],
+Cell[2712, 86, 431, 9, 36, "Input",ExpressionUUID->"67330c57-4ea7-5f44-ac6f-104c61b27227"],
+Cell[3146, 97, 201, 3, 45, "Text",ExpressionUUID->"5ae57e0b-07b5-3043-b728-904364e93249"],
+Cell[CellGroupData[{
+Cell[3372, 104, 182, 2, 36, "Input",ExpressionUUID->"14163406-fa4f-b54d-8d5e-e5492f0fe368"],
+Cell[3557, 108, 5703, 131, 67, "Output",ExpressionUUID->"632c7eb3-01bc-9242-8bce-fc5e18cb0def"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9297, 244, 902, 21, 62, "Input",ExpressionUUID->"16ce3fdb-353a-1647-b747-bd366e4f5123"],
+Cell[10202, 267, 5832, 134, 67, "Output",ExpressionUUID->"4b9982c3-7f76-f74d-b297-4badadf2728a"]
+}, Open  ]],
+Cell[16049, 404, 191, 3, 45, "Text",ExpressionUUID->"d728b4c3-a09b-aa4e-b356-e5d2ed47b2e3"],
+Cell[CellGroupData[{
+Cell[16265, 411, 557, 13, 36, "Input",ExpressionUUID->"3683d990-f2ab-7b47-bb9a-3a7d5e0299a2"],
+Cell[16825, 426, 43510, 823, 258, "Output",ExpressionUUID->"972ecce1-a56e-b84f-9dba-feac10e381ef"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60384, 1255, 167, 3, 70, "Subsection",ExpressionUUID->"38e5476e-8ebb-f245-be00-7dc428535008"],
+Cell[60554, 1260, 195, 3, 45, "Text",ExpressionUUID->"ed0c5463-fc53-b64c-bdf4-02c6dc43628e"],
+Cell[CellGroupData[{
+Cell[60774, 1267, 298, 5, 36, "Input",ExpressionUUID->"0b8b202d-2efa-a442-a1da-5e658c89e952"],
+Cell[61075, 1274, 3627, 77, 92, "Output",ExpressionUUID->"e56c016d-34da-294d-a103-827500fcfee9"]
+}, Open  ]],
+Cell[64717, 1354, 265, 6, 45, "Text",ExpressionUUID->"0b5b4843-e752-5444-8122-f6ed3953ef58"],
+Cell[CellGroupData[{
+Cell[65007, 1364, 554, 14, 36, "Input",ExpressionUUID->"e8b5d09a-61d0-0041-8e0f-616be1011426"],
+Cell[65564, 1380, 5734, 132, 67, "Output",ExpressionUUID->"6943ec92-2d4c-904f-bf97-569c34347020"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[71335, 1517, 435, 10, 36, "Input",ExpressionUUID->"b6612d38-cc60-b649-9a89-fd196c707120"],
+Cell[71773, 1529, 177, 2, 41, "Output",ExpressionUUID->"26f2193c-ff15-eb42-8454-b528b8b0caef"]
+}, Open  ]],
+Cell[71965, 1534, 256, 6, 45, "Text",ExpressionUUID->"3c0a2cf2-3b83-8b48-b358-452598676462"],
+Cell[72224, 1542, 189, 3, 45, "Text",ExpressionUUID->"2af44377-aa38-e04f-9a8a-00e845df2593"],
+Cell[CellGroupData[{
+Cell[72438, 1549, 394, 9, 36, "Input",ExpressionUUID->"0056da57-4a42-d54e-b6a8-77e5c3385c74"],
+Cell[72835, 1560, 5705, 131, 67, "Output",ExpressionUUID->"b16044d5-c4db-3548-b2ac-3529b0bd0434"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[78589, 1697, 168, 3, 70, "Subsection",ExpressionUUID->"415229d2-8406-844f-a793-c541b9f87e9e"],
+Cell[78760, 1702, 342, 7, 45, "Text",ExpressionUUID->"4301e8e4-229d-204f-b800-2fe22cfebf59"],
+Cell[CellGroupData[{
+Cell[79127, 1713, 228, 3, 36, "Input",ExpressionUUID->"a3fb2c65-f094-8441-a1c8-a8a4c4c55ada"],
+Cell[79358, 1718, 195, 4, 28, "Print",ExpressionUUID->"a40608c9-954f-934d-8fc5-83b82a23a2cf"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
