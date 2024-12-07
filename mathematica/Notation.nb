@@ -1,0 +1,1196 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     46642,       1188]
+NotebookOptionsPosition[     44928,       1154]
+NotebookOutlinePosition[     45368,       1171]
+CellTagsIndexPosition[     45325,       1168]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"NotebookEvaluate", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<RubiksCube.nb\>\""}], 
+   ",", 
+   RowBox[{"EvaluationElements", "->", "Automatic"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.9425245952537384`*^9, 3.942524611315756*^9}},
+ CellLabel->
+  "In[113]:=",ExpressionUUID->"28507788-f0c9-954d-9d05-36c6be61fa70"],
+
+Cell[CellGroupData[{
+
+Cell["Graphics Primitives", "Section",
+ CellChangeTimes->{{3.9425244828815575`*^9, 
+  3.9425244868794556`*^9}},ExpressionUUID->"8ca9b5e6-6f64-6d43-9f4d-\
+87d53c2e82a6"],
+
+Cell["A single cell of a small cube.", "Text",
+ CellChangeTimes->{{3.9425244884368668`*^9, 
+  3.942524506105448*^9}},ExpressionUUID->"dd1aaf9a-0551-e045-a81e-\
+dfe2b1c65125"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"cell", "[", 
+   RowBox[{"center_", ",", "number_"}], "]"}], ":=", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"EdgeForm", "[", "Black", "]"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Opacity", "[", "1", "]"}], ",", "\[IndentingNewLine]", "White",
+       ",", "\[IndentingNewLine]", 
+      RowBox[{"Polygon", "[", 
+       RowBox[{"Transpose", "[", 
+        RowBox[{"center", "+", 
+         RowBox[{
+          RowBox[{"Transpose", "@", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1"}], ",", 
+               RowBox[{"-", "1"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", 
+               RowBox[{"-", "1"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"1", ",", "1"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"-", "1"}], ",", "1"}], "}"}]}], "}"}]}], "/", "2"}]}],
+         "]"}], "]"}]}], "\[IndentingNewLine]", "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{"Text", "[", 
+      RowBox[{
+       RowBox[{"Style", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", "number", "]"}], ",", "Black", ",", "24"}], 
+        "]"}], ",", "center"}], "]"}], "\[IndentingNewLine]", "}"}]}], 
+   "\[IndentingNewLine]", "}"}]}]], "Input",
+ CellChangeTimes->{{3.9425234584181595`*^9, 3.942523603670639*^9}, {
+  3.942523641727209*^9, 3.942523723193741*^9}, {3.9425243265207043`*^9, 
+  3.9425243278829536`*^9}},
+ CellLabel->
+  "In[109]:=",ExpressionUUID->"d0a42038-ebaa-ca44-8d96-d5f3349df660"],
+
+Cell["Create one single face of the Rubik\[CloseCurlyQuote]s Cube", "Text",
+ CellChangeTimes->{{3.94252451049028*^9, 
+  3.942524521589285*^9}},ExpressionUUID->"9a43baaa-a72c-4e4d-87fd-\
+8940036478a6"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"face", "[", 
+   RowBox[{"center_", ",", "range_List", ",", "index_"}], "]"}], ":=", 
+  RowBox[{"With", "[", 
+   RowBox[{
+    RowBox[{"{", "\[IndentingNewLine]", 
+     RowBox[{"offsets", "=", 
+      RowBox[{"Catenate", "@", 
+       RowBox[{"Outer", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"#2", ",", "#1"}], "}"}], "&"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "0", ",", 
+           RowBox[{"-", "1"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "1"}], ",", "0", ",", "1"}], "}"}]}], "]"}]}]}], 
+     "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{"MapThread", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"cell", "[", 
+        RowBox[{
+         RowBox[{"#1", "+", "center"}], ",", "#2"}], "]"}], "&"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{"offsets", ",", "\[IndentingNewLine]", 
+        RowBox[{"ReplaceAll", "[", 
+         RowBox[{
+          RowBox[{"Range", "[", 
+           RowBox[{
+            RowBox[{"range", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"range", "[", 
+              RowBox[{"[", "2", "]"}], "]"}], "-", "1"}]}], "]"}], ",", 
+          RowBox[{
+           RowBox[{"Floor", "[", 
+            RowBox[{
+             RowBox[{"Plus", "@@", "range"}], "/", "2"}], "]"}], "->", 
+           "index"}]}], "]"}]}], "\[IndentingNewLine]", "}"}]}], 
+     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", "]"}]}]], "Input",
+ CellChangeTimes->{{3.9425237333454075`*^9, 3.9425238046544247`*^9}, {
+   3.9425238560354557`*^9, 3.9425239037159214`*^9}, {3.9425239520775814`*^9, 
+   3.9425239704139977`*^9}, 3.942524003888277*^9, {3.9425241775287247`*^9, 
+   3.942524205807295*^9}, {3.9425243023150654`*^9, 3.942524302528391*^9}, {
+   3.942524353020874*^9, 3.9425243956780777`*^9}, {3.9425244311635036`*^9, 
+   3.9425244758103714`*^9}},
+ CellLabel->
+  "In[108]:=",ExpressionUUID->"a248b4d3-76cd-274e-89a3-25c7d1d84f22"],
+
+Cell["Create the 2D flatten diagram of the Rubik\[CloseCurlyQuote]s Cube", \
+"Text",
+ CellChangeTimes->{{3.942524524959751*^9, 
+  3.9425245479655304`*^9}},ExpressionUUID->"7fe89eba-0d7a-5c4f-a7bf-\
+b2b4b8614535"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"cubeFlattened", "=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{"offsets", "=", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"0", ",", "3"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"-", "3"}], ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"6", ",", "0"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"0", ",", 
+           RowBox[{"-", "3"}]}], "}"}]}], "}"}]}], "\[IndentingNewLine]", 
+      "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{"MapThread", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"face", "[", 
+         RowBox[{"#1", ",", "#2", ",", "#3"}], "]"}], "&"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{"offsets", ",", "\[IndentingNewLine]", 
+         RowBox[{"Partition", "[", 
+          RowBox[{
+           RowBox[{"Range", "[", 
+            RowBox[{"1", ",", "55", ",", "9"}], "]"}], ",", "2", ",", "1"}], 
+          "]"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{
+          "\"\<T\>\"", ",", "\"\<L\>\"", ",", "\"\<F\>\"", ",", "\"\<R\>\"", 
+           ",", "\"\<B\>\"", ",", "\"\<D\>\""}], "}"}]}], 
+        "\[IndentingNewLine]", "}"}]}], "\[IndentingNewLine]", "]"}]}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.9425238850677624`*^9, 3.942523889990391*^9}, {
+   3.9425239731924553`*^9, 3.9425242803039513`*^9}, {3.942524402973894*^9, 
+   3.9425244177681065`*^9}, 3.9425245374336967`*^9},
+ CellLabel->
+  "In[111]:=",ExpressionUUID->"8890381c-27e7-3849-9984-602ea610d3eb"],
+
+Cell["Number order and face indices are shown as following:", "Text",
+ CellChangeTimes->{{3.9425245522832184`*^9, 
+  3.942524584607031*^9}},ExpressionUUID->"c00eaa86-7862-6c45-9c51-\
+92358d1e686e"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Graphics", "[", 
+  RowBox[{"cubeFlattened", ",", 
+   RowBox[{"ImageSize", "->", "Large"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.942524282127596*^9, 3.942524322093767*^9}, 
+   3.94252454108313*^9},
+ CellLabel->
+  "In[112]:=",ExpressionUUID->"5d363173-7ff4-e34d-a7ec-320f20b60f09"],
+
+Cell[BoxData[
+ GraphicsBox[{{{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[7, 2]}, {
+         Rational[-1, 2], Rational[7, 2]}, {
+         Rational[-1, 2], Rational[9, 2]}, {
+         Rational[-3, 2], Rational[9, 2]}}, {{-1.5, 3.5}, {-0.5, 3.5}, {-0.5, 
+        4.5}, {-1.5, 4.5}}]]}, InsetBox[
+      StyleBox["\<\"1\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, 4}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[7, 2]}, {
+         Rational[1, 2], Rational[7, 2]}, {Rational[1, 2], Rational[9, 2]}, {
+         Rational[-1, 2], Rational[9, 2]}}, {{-0.5, 3.5}, {0.5, 3.5}, {0.5, 
+        4.5}, {-0.5, 4.5}}]]}, InsetBox[
+      StyleBox["\<\"2\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, 4}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[7, 2]}, {
+         Rational[3, 2], Rational[7, 2]}, {Rational[3, 2], Rational[9, 2]}, {
+         Rational[1, 2], Rational[9, 2]}}, {{0.5, 3.5}, {1.5, 3.5}, {1.5, 
+        4.5}, {0.5, 4.5}}]]}, InsetBox[
+      StyleBox["\<\"3\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, 4}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[5, 2]}, {
+         Rational[-1, 2], Rational[5, 2]}, {
+         Rational[-1, 2], Rational[7, 2]}, {
+         Rational[-3, 2], Rational[7, 2]}}, {{-1.5, 2.5}, {-0.5, 2.5}, {-0.5, 
+        3.5}, {-1.5, 3.5}}]]}, InsetBox[
+      StyleBox["\<\"4\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, 3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[5, 2]}, {
+         Rational[1, 2], Rational[5, 2]}, {Rational[1, 2], Rational[7, 2]}, {
+         Rational[-1, 2], Rational[7, 2]}}, {{-0.5, 2.5}, {0.5, 2.5}, {0.5, 
+        3.5}, {-0.5, 3.5}}]]}, InsetBox[
+      StyleBox["\<\"T\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, 3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[5, 2]}, {
+         Rational[3, 2], Rational[5, 2]}, {Rational[3, 2], Rational[7, 2]}, {
+         Rational[1, 2], Rational[7, 2]}}, {{0.5, 2.5}, {1.5, 2.5}, {1.5, 
+        3.5}, {0.5, 3.5}}]]}, InsetBox[
+      StyleBox["\<\"6\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, 3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[3, 2]}, {
+         Rational[-1, 2], Rational[3, 2]}, {
+         Rational[-1, 2], Rational[5, 2]}, {
+         Rational[-3, 2], Rational[5, 2]}}, {{-1.5, 1.5}, {-0.5, 1.5}, {-0.5, 
+        2.5}, {-1.5, 2.5}}]]}, InsetBox[
+      StyleBox["\<\"7\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, 2}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[3, 2]}, {
+         Rational[1, 2], Rational[3, 2]}, {Rational[1, 2], Rational[5, 2]}, {
+         Rational[-1, 2], Rational[5, 2]}}, {{-0.5, 1.5}, {0.5, 1.5}, {0.5, 
+        2.5}, {-0.5, 2.5}}]]}, InsetBox[
+      StyleBox["\<\"8\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, 2}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[3, 2]}, {
+         Rational[3, 2], Rational[3, 2]}, {Rational[3, 2], Rational[5, 2]}, {
+         Rational[1, 2], Rational[5, 2]}}, {{0.5, 1.5}, {1.5, 1.5}, {1.5, 
+        2.5}, {0.5, 2.5}}]]}, InsetBox[
+      StyleBox["\<\"9\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, 2}]}}, {{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-9, 2], Rational[1, 2]}, {
+         Rational[-7, 2], Rational[1, 2]}, {
+         Rational[-7, 2], Rational[3, 2]}, {
+         Rational[-9, 2], Rational[3, 2]}}, {{-4.5, 0.5}, {-3.5, 0.5}, {-3.5, 
+        1.5}, {-4.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"10\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-4, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-7, 2], Rational[1, 2]}, {
+         Rational[-5, 2], Rational[1, 2]}, {
+         Rational[-5, 2], Rational[3, 2]}, {
+         Rational[-7, 2], Rational[3, 2]}}, {{-3.5, 0.5}, {-2.5, 0.5}, {-2.5, 
+        1.5}, {-3.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"11\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-3, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-5, 2], Rational[1, 2]}, {
+         Rational[-3, 2], Rational[1, 2]}, {
+         Rational[-3, 2], Rational[3, 2]}, {
+         Rational[-5, 2], Rational[3, 2]}}, {{-2.5, 0.5}, {-1.5, 0.5}, {-1.5, 
+        1.5}, {-2.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"12\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-2, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-9, 2], Rational[-1, 2]}, {
+         Rational[-7, 2], Rational[-1, 2]}, {
+         Rational[-7, 2], Rational[1, 2]}, {
+         Rational[-9, 2], Rational[
+          1, 2]}}, {{-4.5, -0.5}, {-3.5, -0.5}, {-3.5, 0.5}, {-4.5, 0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"13\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-4, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-7, 2], Rational[-1, 2]}, {
+         Rational[-5, 2], Rational[-1, 2]}, {
+         Rational[-5, 2], Rational[1, 2]}, {
+         Rational[-7, 2], Rational[
+          1, 2]}}, {{-3.5, -0.5}, {-2.5, -0.5}, {-2.5, 0.5}, {-3.5, 0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"L\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-3, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-5, 2], Rational[-1, 2]}, {
+         Rational[-3, 2], Rational[-1, 2]}, {
+         Rational[-3, 2], Rational[1, 2]}, {
+         Rational[-5, 2], Rational[
+          1, 2]}}, {{-2.5, -0.5}, {-1.5, -0.5}, {-1.5, 0.5}, {-2.5, 0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"15\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-2, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-9, 2], Rational[-3, 2]}, {
+         Rational[-7, 2], Rational[-3, 2]}, {
+         Rational[-7, 2], Rational[-1, 2]}, {
+         Rational[-9, 2], 
+          Rational[-1, 
+           2]}}, {{-4.5, -1.5}, {-3.5, -1.5}, {-3.5, -0.5}, {-4.5, -0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"16\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-4, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-7, 2], Rational[-3, 2]}, {
+         Rational[-5, 2], Rational[-3, 2]}, {
+         Rational[-5, 2], Rational[-1, 2]}, {
+         Rational[-7, 2], 
+          Rational[-1, 
+           2]}}, {{-3.5, -1.5}, {-2.5, -1.5}, {-2.5, -0.5}, {-3.5, -0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"17\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-3, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-5, 2], Rational[-3, 2]}, {
+         Rational[-3, 2], Rational[-3, 2]}, {
+         Rational[-3, 2], Rational[-1, 2]}, {
+         Rational[-5, 2], 
+          Rational[-1, 
+           2]}}, {{-2.5, -1.5}, {-1.5, -1.5}, {-1.5, -0.5}, {-2.5, -0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"18\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-2, -1}]}}, {{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[1, 2]}, {
+         Rational[-1, 2], Rational[1, 2]}, {
+         Rational[-1, 2], Rational[3, 2]}, {
+         Rational[-3, 2], Rational[3, 2]}}, {{-1.5, 0.5}, {-0.5, 0.5}, {-0.5, 
+        1.5}, {-1.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"19\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[1, 2]}, {
+         Rational[1, 2], Rational[1, 2]}, {Rational[1, 2], Rational[3, 2]}, {
+         Rational[-1, 2], Rational[3, 2]}}, {{-0.5, 0.5}, {0.5, 0.5}, {0.5, 
+        1.5}, {-0.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"20\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[1, 2]}, {
+         Rational[3, 2], Rational[1, 2]}, {Rational[3, 2], Rational[3, 2]}, {
+         Rational[1, 2], Rational[3, 2]}}, {{0.5, 0.5}, {1.5, 0.5}, {1.5, 
+        1.5}, {0.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"21\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[-1, 2]}, {
+         Rational[-1, 2], Rational[-1, 2]}, {
+         Rational[-1, 2], Rational[1, 2]}, {
+         Rational[-3, 2], Rational[
+          1, 2]}}, {{-1.5, -0.5}, {-0.5, -0.5}, {-0.5, 0.5}, {-1.5, 0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"22\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[-1, 2]}, {
+         Rational[1, 2], Rational[-1, 2]}, {Rational[1, 2], Rational[1, 2]}, {
+         Rational[-1, 2], Rational[1, 2]}}, {{-0.5, -0.5}, {0.5, -0.5}, {0.5, 
+        0.5}, {-0.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"F\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[-1, 2]}, {
+         Rational[3, 2], Rational[-1, 2]}, {Rational[3, 2], Rational[1, 2]}, {
+         Rational[1, 2], Rational[1, 2]}}, {{0.5, -0.5}, {1.5, -0.5}, {1.5, 
+        0.5}, {0.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"24\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[-3, 2]}, {
+         Rational[-1, 2], Rational[-3, 2]}, {
+         Rational[-1, 2], Rational[-1, 2]}, {
+         Rational[-3, 2], 
+          Rational[-1, 
+           2]}}, {{-1.5, -1.5}, {-0.5, -1.5}, {-0.5, -0.5}, {-1.5, -0.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"25\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[-3, 2]}, {
+         Rational[1, 2], Rational[-3, 2]}, {
+         Rational[1, 2], Rational[-1, 2]}, {
+         Rational[-1, 2], Rational[-1, 2]}}, {{-0.5, -1.5}, {0.5, -1.5}, {
+        0.5, -0.5}, {-0.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"26\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[-3, 2]}, {
+         Rational[3, 2], Rational[-3, 2]}, {
+         Rational[3, 2], Rational[-1, 2]}, {
+         Rational[1, 2], Rational[-1, 2]}}, {{0.5, -1.5}, {1.5, -1.5}, {
+        1.5, -0.5}, {0.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"27\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, -1}]}}, {{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[3, 2], Rational[1, 2]}, {
+         Rational[5, 2], Rational[1, 2]}, {Rational[5, 2], Rational[3, 2]}, {
+         Rational[3, 2], Rational[3, 2]}}, {{1.5, 0.5}, {2.5, 0.5}, {2.5, 
+        1.5}, {1.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"28\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {2, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[5, 2], Rational[1, 2]}, {
+         Rational[7, 2], Rational[1, 2]}, {Rational[7, 2], Rational[3, 2]}, {
+         Rational[5, 2], Rational[3, 2]}}, {{2.5, 0.5}, {3.5, 0.5}, {3.5, 
+        1.5}, {2.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"29\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {3, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[7, 2], Rational[1, 2]}, {
+         Rational[9, 2], Rational[1, 2]}, {Rational[9, 2], Rational[3, 2]}, {
+         Rational[7, 2], Rational[3, 2]}}, {{3.5, 0.5}, {4.5, 0.5}, {4.5, 
+        1.5}, {3.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"30\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {4, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[3, 2], Rational[-1, 2]}, {
+         Rational[5, 2], Rational[-1, 2]}, {Rational[5, 2], Rational[1, 2]}, {
+         Rational[3, 2], Rational[1, 2]}}, {{1.5, -0.5}, {2.5, -0.5}, {2.5, 
+        0.5}, {1.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"31\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {2, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[5, 2], Rational[-1, 2]}, {
+         Rational[7, 2], Rational[-1, 2]}, {Rational[7, 2], Rational[1, 2]}, {
+         Rational[5, 2], Rational[1, 2]}}, {{2.5, -0.5}, {3.5, -0.5}, {3.5, 
+        0.5}, {2.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"R\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {3, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[7, 2], Rational[-1, 2]}, {
+         Rational[9, 2], Rational[-1, 2]}, {Rational[9, 2], Rational[1, 2]}, {
+         Rational[7, 2], Rational[1, 2]}}, {{3.5, -0.5}, {4.5, -0.5}, {4.5, 
+        0.5}, {3.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"33\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {4, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[3, 2], Rational[-3, 2]}, {
+         Rational[5, 2], Rational[-3, 2]}, {
+         Rational[5, 2], Rational[-1, 2]}, {
+         Rational[3, 2], Rational[-1, 2]}}, {{1.5, -1.5}, {2.5, -1.5}, {
+        2.5, -0.5}, {1.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"34\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {2, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[5, 2], Rational[-3, 2]}, {
+         Rational[7, 2], Rational[-3, 2]}, {
+         Rational[7, 2], Rational[-1, 2]}, {
+         Rational[5, 2], Rational[-1, 2]}}, {{2.5, -1.5}, {3.5, -1.5}, {
+        3.5, -0.5}, {2.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"35\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {3, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[7, 2], Rational[-3, 2]}, {
+         Rational[9, 2], Rational[-3, 2]}, {
+         Rational[9, 2], Rational[-1, 2]}, {
+         Rational[7, 2], Rational[-1, 2]}}, {{3.5, -1.5}, {4.5, -1.5}, {
+        4.5, -0.5}, {3.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"36\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {4, -1}]}}, {{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[9, 2], Rational[1, 2]}, {
+         Rational[11, 2], Rational[1, 2]}, {
+         Rational[11, 2], Rational[3, 2]}, {
+         Rational[9, 2], Rational[3, 2]}}, {{4.5, 0.5}, {5.5, 0.5}, {5.5, 
+        1.5}, {4.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"37\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {5, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[11, 2], Rational[1, 2]}, {
+         Rational[13, 2], Rational[1, 2]}, {
+         Rational[13, 2], Rational[3, 2]}, {
+         Rational[11, 2], Rational[3, 2]}}, {{5.5, 0.5}, {6.5, 0.5}, {6.5, 
+        1.5}, {5.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"38\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {6, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[13, 2], Rational[1, 2]}, {
+         Rational[15, 2], Rational[1, 2]}, {
+         Rational[15, 2], Rational[3, 2]}, {
+         Rational[13, 2], Rational[3, 2]}}, {{6.5, 0.5}, {7.5, 0.5}, {7.5, 
+        1.5}, {6.5, 1.5}}]]}, InsetBox[
+      StyleBox["\<\"39\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {7, 1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[9, 2], Rational[-1, 2]}, {
+         Rational[11, 2], Rational[-1, 2]}, {
+         Rational[11, 2], Rational[1, 2]}, {
+         Rational[9, 2], Rational[1, 2]}}, {{4.5, -0.5}, {5.5, -0.5}, {5.5, 
+        0.5}, {4.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"40\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {5, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[11, 2], Rational[-1, 2]}, {
+         Rational[13, 2], Rational[-1, 2]}, {
+         Rational[13, 2], Rational[1, 2]}, {
+         Rational[11, 2], Rational[1, 2]}}, {{5.5, -0.5}, {6.5, -0.5}, {6.5, 
+        0.5}, {5.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"B\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {6, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[13, 2], Rational[-1, 2]}, {
+         Rational[15, 2], Rational[-1, 2]}, {
+         Rational[15, 2], Rational[1, 2]}, {
+         Rational[13, 2], Rational[1, 2]}}, {{6.5, -0.5}, {7.5, -0.5}, {7.5, 
+        0.5}, {6.5, 0.5}}]]}, InsetBox[
+      StyleBox["\<\"42\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {7, 0}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[9, 2], Rational[-3, 2]}, {
+         Rational[11, 2], Rational[-3, 2]}, {
+         Rational[11, 2], Rational[-1, 2]}, {
+         Rational[9, 2], Rational[-1, 2]}}, {{4.5, -1.5}, {5.5, -1.5}, {
+        5.5, -0.5}, {4.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"43\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {5, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[11, 2], Rational[-3, 2]}, {
+         Rational[13, 2], Rational[-3, 2]}, {
+         Rational[13, 2], Rational[-1, 2]}, {
+         Rational[11, 2], Rational[-1, 2]}}, {{5.5, -1.5}, {6.5, -1.5}, {
+        6.5, -0.5}, {5.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"44\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {6, -1}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[13, 2], Rational[-3, 2]}, {
+         Rational[15, 2], Rational[-3, 2]}, {
+         Rational[15, 2], Rational[-1, 2]}, {
+         Rational[13, 2], Rational[-1, 2]}}, {{6.5, -1.5}, {7.5, -1.5}, {
+        7.5, -0.5}, {6.5, -0.5}}]]}, InsetBox[
+      StyleBox["\<\"45\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {7, -1}]}}, {{
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[-5, 2]}, {
+         Rational[-1, 2], Rational[-5, 2]}, {
+         Rational[-1, 2], Rational[-3, 2]}, {
+         Rational[-3, 2], 
+          Rational[-3, 
+           2]}}, {{-1.5, -2.5}, {-0.5, -2.5}, {-0.5, -1.5}, {-1.5, -1.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"46\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, -2}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[-5, 2]}, {
+         Rational[1, 2], Rational[-5, 2]}, {
+         Rational[1, 2], Rational[-3, 2]}, {
+         Rational[-1, 2], Rational[-3, 2]}}, {{-0.5, -2.5}, {0.5, -2.5}, {
+        0.5, -1.5}, {-0.5, -1.5}}]]}, InsetBox[
+      StyleBox["\<\"47\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, -2}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[-5, 2]}, {
+         Rational[3, 2], Rational[-5, 2]}, {
+         Rational[3, 2], Rational[-3, 2]}, {
+         Rational[1, 2], Rational[-3, 2]}}, {{0.5, -2.5}, {1.5, -2.5}, {
+        1.5, -1.5}, {0.5, -1.5}}]]}, InsetBox[
+      StyleBox["\<\"48\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, -2}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[-7, 2]}, {
+         Rational[-1, 2], Rational[-7, 2]}, {
+         Rational[-1, 2], Rational[-5, 2]}, {
+         Rational[-3, 2], 
+          Rational[-5, 
+           2]}}, {{-1.5, -3.5}, {-0.5, -3.5}, {-0.5, -2.5}, {-1.5, -2.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"49\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, -3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[-7, 2]}, {
+         Rational[1, 2], Rational[-7, 2]}, {
+         Rational[1, 2], Rational[-5, 2]}, {
+         Rational[-1, 2], Rational[-5, 2]}}, {{-0.5, -3.5}, {0.5, -3.5}, {
+        0.5, -2.5}, {-0.5, -2.5}}]]}, InsetBox[
+      StyleBox["\<\"D\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, -3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[-7, 2]}, {
+         Rational[3, 2], Rational[-7, 2]}, {
+         Rational[3, 2], Rational[-5, 2]}, {
+         Rational[1, 2], Rational[-5, 2]}}, {{0.5, -3.5}, {1.5, -3.5}, {
+        1.5, -2.5}, {0.5, -2.5}}]]}, InsetBox[
+      StyleBox["\<\"51\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, -3}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-3, 2], Rational[-9, 2]}, {
+         Rational[-1, 2], Rational[-9, 2]}, {
+         Rational[-1, 2], Rational[-7, 2]}, {
+         Rational[-3, 2], 
+          Rational[-7, 
+           2]}}, {{-1.5, -4.5}, {-0.5, -4.5}, {-0.5, -3.5}, {-1.5, -3.5}}]]}, 
+     InsetBox[
+      StyleBox["\<\"52\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {-1, -4}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[-1, 2], Rational[-9, 2]}, {
+         Rational[1, 2], Rational[-9, 2]}, {
+         Rational[1, 2], Rational[-7, 2]}, {
+         Rational[-1, 2], Rational[-7, 2]}}, {{-0.5, -4.5}, {0.5, -4.5}, {
+        0.5, -3.5}, {-0.5, -3.5}}]]}, InsetBox[
+      StyleBox["\<\"53\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {0, -4}]}, {
+     {GrayLevel[1], Opacity[1], EdgeForm[GrayLevel[0]], 
+      PolygonBox[
+       NCache[{{Rational[1, 2], Rational[-9, 2]}, {
+         Rational[3, 2], Rational[-9, 2]}, {
+         Rational[3, 2], Rational[-7, 2]}, {
+         Rational[1, 2], Rational[-7, 2]}}, {{0.5, -4.5}, {1.5, -4.5}, {
+        1.5, -3.5}, {0.5, -3.5}}]]}, InsetBox[
+      StyleBox["\<\"54\"\>",
+       StripOnInput->False,
+       LineColor->GrayLevel[0],
+       FrontFaceColor->GrayLevel[0],
+       BackFaceColor->GrayLevel[0],
+       GraphicsColor->GrayLevel[0],
+       FontSize->24,
+       FontColor->GrayLevel[0]], {1, -4}]}}},
+  ImageSize->Large]], "Output",
+ CellChangeTimes->{{3.94252428477199*^9, 3.942524331670456*^9}, {
+   3.9425244191786785`*^9, 3.9425244600250664`*^9}, 3.942524549584036*^9},
+ CellLabel->
+  "Out[112]=",ExpressionUUID->"c08ae9cb-2769-284a-bc17-2841e19c1dde"]
+}, Open  ]],
+
+Cell["\<\
+Each operator is named by corresponding face index, giving a permutation of \
+those numbers.\
+\>", "Text",
+ CellChangeTimes->{{3.9425246201071587`*^9, 
+  3.9425246449803944`*^9}},ExpressionUUID->"71a24cea-6133-c544-8197-\
+cba5ab28c18d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["operators"], "Input",
+ CellChangeTimes->{{3.942524614641243*^9, 3.942524615290823*^9}},
+ CellLabel->
+  "In[114]:=",ExpressionUUID->"0a57f195-945c-df48-b86a-c52de867afe3"],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{"\<\"T\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "3", ",", "9", ",", "7"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "6", ",", "8", ",", "4"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"10", ",", "37", ",", "28", ",", "19"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"11", ",", "38", ",", "29", ",", "20"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"12", ",", "39", ",", "30", ",", "21"}], "}"}]}], "}"}], 
+     "]"}]}], ",", 
+   RowBox[{"\<\"L\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "19", ",", "46", ",", "45"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"4", ",", "22", ",", "49", ",", "42"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"7", ",", "25", ",", "52", ",", "39"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"10", ",", "12", ",", "18", ",", "16"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"11", ",", "15", ",", "17", ",", "13"}], "}"}]}], "}"}], 
+     "]"}]}], ",", 
+   RowBox[{"\<\"F\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"7", ",", "28", ",", "48", ",", "18"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"8", ",", "31", ",", "47", ",", "15"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"9", ",", "34", ",", "46", ",", "12"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"19", ",", "21", ",", "27", ",", "25"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"20", ",", "24", ",", "26", ",", "22"}], "}"}]}], "}"}], 
+     "]"}]}], ",", 
+   RowBox[{"\<\"R\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"3", ",", "43", ",", "48", ",", "21"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"6", ",", "40", ",", "51", ",", "24"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"9", ",", "37", ",", "54", ",", "27"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"28", ",", "30", ",", "36", ",", "34"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"29", ",", "33", ",", "35", ",", "31"}], "}"}]}], "}"}], 
+     "]"}]}], ",", 
+   RowBox[{"\<\"B\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", "16", ",", "54", ",", "30"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", "13", ",", "53", ",", "33"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"3", ",", "10", ",", "52", ",", "36"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"37", ",", "39", ",", "45", ",", "43"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"38", ",", "42", ",", "44", ",", "40"}], "}"}]}], "}"}], 
+     "]"}]}], ",", 
+   RowBox[{"\<\"D\"\>", "\[Rule]", 
+    RowBox[{"Cycles", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"16", ",", "25", ",", "34", ",", "43"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"17", ",", "26", ",", "35", ",", "44"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"18", ",", "27", ",", "36", ",", "45"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"46", ",", "48", ",", "54", ",", "52"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"47", ",", "51", ",", "53", ",", "49"}], "}"}]}], "}"}], 
+     "]"}]}]}], "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{3.942524615618765*^9},
+ CellLabel->
+  "Out[114]=",ExpressionUUID->"5480c165-842a-8143-88cb-894a7f5e5206"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1152, 579.6},
+WindowMargins->{{
+  Automatic, -5.399999999999864}, {-5.399999999999977, Automatic}},
+FrontEndVersion->"14.0 for Microsoft Windows (64-bit) (December 12, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"edde4dfb-951a-ff4f-90b8-b5bcb724b8d0"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 383, 9, 28, "Input",ExpressionUUID->"28507788-f0c9-954d-9d05-36c6be61fa70"],
+Cell[CellGroupData[{
+Cell[966, 33, 168, 3, 67, "Section",ExpressionUUID->"8ca9b5e6-6f64-6d43-9f4d-87d53c2e82a6"],
+Cell[1137, 38, 174, 3, 35, "Text",ExpressionUUID->"dd1aaf9a-0551-e045-a81e-dfe2b1c65125"],
+Cell[1314, 43, 1723, 44, 219, "Input",ExpressionUUID->"d0a42038-ebaa-ca44-8d96-d5f3349df660"],
+Cell[3040, 89, 200, 3, 35, "Text",ExpressionUUID->"9a43baaa-a72c-4e4d-87fd-8940036478a6"],
+Cell[3243, 94, 2126, 52, 219, "Input",ExpressionUUID->"a248b4d3-76cd-274e-89a3-25c7d1d84f22"],
+Cell[5372, 148, 212, 4, 35, "Text",ExpressionUUID->"7fe89eba-0d7a-5c4f-a7bf-b2b4b8614535"],
+Cell[5587, 154, 1869, 47, 238, "Input",ExpressionUUID->"8890381c-27e7-3849-9984-602ea610d3eb"],
+Cell[7459, 203, 197, 3, 35, "Text",ExpressionUUID->"c00eaa86-7862-6c45-9c51-92358d1e686e"],
+Cell[CellGroupData[{
+Cell[7681, 210, 307, 7, 28, "Input",ExpressionUUID->"5d363173-7ff4-e34d-a7ec-320f20b60f09"],
+Cell[7991, 219, 32781, 818, 453, "Output",ExpressionUUID->"c08ae9cb-2769-284a-bc17-2841e19c1dde"]
+}, Open  ]],
+Cell[40787, 1040, 246, 6, 35, "Text",ExpressionUUID->"71a24cea-6133-c544-8197-cba5ab28c18d"],
+Cell[CellGroupData[{
+Cell[41058, 1050, 184, 3, 28, "Input",ExpressionUUID->"0a57f195-945c-df48-b86a-c52de867afe3"],
+Cell[41245, 1055, 3655, 95, 128, "Output",ExpressionUUID->"5480c165-842a-8143-88cb-894a7f5e5206"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
