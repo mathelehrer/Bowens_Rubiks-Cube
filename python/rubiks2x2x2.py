@@ -45,15 +45,13 @@ def show():
     print(pairs[::2])
     print(pairs[1::2])
 
-if __name__ == '__main__':
-
-    # layout()
-    a=Permutation(2,1)
-    b=Permutation(1,0)
-    G=PermutationGroup(a,b)
+def facelets():
+    a = Permutation(2, 1)
+    b = Permutation(1, 0)
+    G = PermutationGroup(a, b)
     print(G.order())
 
-    P=Polyhedron(list('ABC'),pgroup=G)
+    P = Polyhedron(list('ABC'), pgroup=G)
     print(P.corners)
     P.rotate(0)
     print(P.corners)
@@ -62,3 +60,34 @@ if __name__ == '__main__':
 
     facelets = flatten([symbols(s + '1:5') for s in 'UFRBLD'])
     print(facelets)
+
+def coset_factors():
+    a = Permutation(0, 1, 3, 7, 6, 4)(2, 5)
+    b = Permutation(0, 1, 3, 2)(4, 5, 7, 6)
+    G = PermutationGroup([a, b])
+
+    g = Permutation(7)(1, 2, 4)(3, 6, 5)
+
+    print(G.contains(g))
+    f = G.coset_factor(g)
+    print("Coset factors for g")
+    print(f)
+
+    print("Show equivalence")
+    print(f[2] * f[1] * f[0])
+    print(g)
+
+    f1 = G.coset_factor(g, True)
+    print(f1)
+
+    tr = G.basic_transversals
+    print(f[0] == tr[0][f1[0]])
+
+    c = Permutation(5, 6, 7)
+    G.coset_factor(c)
+
+if __name__ == '__main__':
+
+    # layout()
+    coset_factors()
+    # facelets()
