@@ -1,0 +1,2311 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='WolframDesktop 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       161,          7]
+NotebookDataLength[     93538,       2303]
+NotebookOptionsPosition[     87816,       2198]
+NotebookOutlinePosition[     88219,       2214]
+CellTagsIndexPosition[     88176,       2211]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+In this notes, I try to understand algorithms that effectively compute the \
+size of permutation groups. The algorithm relies on the computation of a \
+stabilizer chain. Further details are added as my knowledge increases.\
+\>", "Text",
+ CellChangeTimes->{{3.9437879024961643`*^9, 
+  3.943787982032942*^9}},ExpressionUUID->"6671adf3-49a8-460a-b15b-\
+835612ab4d14"],
+
+Cell[CellGroupData[{
+
+Cell["Action of permutations", "Section",
+ CellChangeTimes->{{3.943201795246784*^9, 
+  3.943201806167714*^9}},ExpressionUUID->"ac85f72b-f645-4d35-a926-\
+02bf4d4d67eb"],
+
+Cell[TextData[{
+ "A vital part in the study of permutation groups is the analysis of their \
+action on point groups. Consider the two cycles ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{
+         StyleBox["a", "TI"], "\[LongEqual]", 
+         RowBox[{"(", 
+           RowBox[{"1", ",", "2"}], ")"}]}], TraditionalForm], "errors" -> {},
+      "input" -> "$a=(1,2)$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "ef346803-431d-43d6-a751-a57bedbe3e00"],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{
+         StyleBox["b", "TI"], "\[LongEqual]", 
+         RowBox[{"(", 
+           RowBox[{"2", ",", "3"}], ")"}]}], TraditionalForm], "errors" -> {},
+      "input" -> "$b=(2,3)$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "f946a46c-0745-4afe-a482-efed720eebd2"],
+ " and the point set ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{"\[CapitalOmega]", "\[LongEqual]", 
+         RowBox[{"{", 
+           RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], TraditionalForm], 
+     "errors" -> {}, "input" -> "$\\Omega=\\{1,2,3\\}$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "9e9b9d00-eb84-49e6-a51b-80f15158995c"],
+ ". The cycle $a$ permutes the first two entries of ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|
+    "boxes" -> FormBox["\[CapitalOmega]", TraditionalForm], "errors" -> {}, 
+     "input" -> "$\\Omega$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "9145d4aa-9a2d-42ce-9560-f6560203de45"],
+ ", whereas the cycle ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       StyleBox["b", "TI"], TraditionalForm], "errors" -> {}, "input" -> 
+     "$b$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "9909011b-8b37-4bc2-b854-09d31a8182ad"],
+ " permutes the last two entries. Since the two permutations share a common \
+index 2, the order of the two operations matter, ",
+ Cell[BoxData[
+  FormBox[
+   TemplateBox[<|"boxes" -> FormBox[
+       RowBox[{
+         StyleBox["a", "TI"], 
+         StyleBox["b", "TI"], "\[NotEqual]", 
+         StyleBox["b", "TI"], 
+         StyleBox["a", "TI"]}], TraditionalForm], "errors" -> {}, "input" -> 
+     "$ab\\neq ba$", "state" -> "Boxes"|>,
+    "TeXAssistantTemplate"], TraditionalForm]],ExpressionUUID->
+  "f41a8355-b0a0-4244-9c53-e68650343575"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.943787990361679*^9, 
+  3.943788207395136*^9}},ExpressionUUID->"6fc89b8e-a771-4276-ae5d-\
+3bef4ef6ec75"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"a", "=", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", "=", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "3"}], "}"}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"\[CapitalOmega]", "=", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"PermutationProduct", "[", 
+  RowBox[{"a", ",", "b"}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{"PermutationProduct", "[", 
+  RowBox[{"b", ",", "a"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.9432018106162243`*^9, 3.943201901580616*^9}, {
+  3.943788210851569*^9, 3.9437882219238853`*^9}},
+ CellLabel->"In[10]:=",ExpressionUUID->"b34f4a73-054c-4a49-a94f-19bd28902c06"],
+
+Cell[BoxData[
+ RowBox[{"Cycles", "[", 
+  RowBox[{"{", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "3", ",", "2"}], "}"}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{{3.9432018509711237`*^9, 3.94320190260321*^9}, {
+  3.94378821426904*^9, 3.9437882228618393`*^9}},
+ CellLabel->"Out[13]=",ExpressionUUID->"a570a7d3-9203-4e56-a068-e521cd646a87"],
+
+Cell[BoxData[
+ RowBox[{"Cycles", "[", 
+  RowBox[{"{", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{{3.9432018509711237`*^9, 3.94320190260321*^9}, {
+  3.94378821426904*^9, 3.9437882228733187`*^9}},
+ CellLabel->"Out[14]=",ExpressionUUID->"3a928523-8267-46fd-84cf-e2298297f0bc"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{"Permute", "[", 
+  RowBox[{
+   RowBox[{"Permute", "[", 
+    RowBox[{"\[CapitalOmega]", ",", "a"}], "]"}], ",", "b"}], 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Permute", "[", 
+  RowBox[{
+   RowBox[{"Permute", "[", 
+    RowBox[{"\[CapitalOmega]", ",", "b"}], "]"}], ",", "a"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.943202010441957*^9, 3.9432020178815327`*^9}, {
+  3.9437882315403233`*^9, 3.943788244444415*^9}},
+ CellLabel->"In[15]:=",ExpressionUUID->"785c388e-f671-460e-b5e8-e85091f20591"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"2", ",", "3", ",", "1"}], "}"}]], "Output",
+ CellChangeTimes->{3.9432020185111027`*^9, 3.943788244970656*^9},
+ CellLabel->"Out[15]=",ExpressionUUID->"8bc5e98c-a098-4394-8c27-20b2e79b443a"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"3", ",", "1", ",", "2"}], "}"}]], "Output",
+ CellChangeTimes->{3.9432020185111027`*^9, 3.943788244989476*^9},
+ CellLabel->"Out[16]=",ExpressionUUID->"71455b86-dd47-4406-9b5d-80b381034084"]
+}, Open  ]],
+
+Cell["\<\
+This clearly shows, that the permutation interchanges positions and not \
+elements!!! The permutation b interchanges the second and third element, no \
+matter what values they posses. Therefore, the permutation can also be \
+applied to a non-numeric set.\
+\>", "Text",
+ CellChangeTimes->{{3.943202037347258*^9, 3.9432020528666697`*^9}, {
+   3.943202091972412*^9, 3.943202139654039*^9}, 
+   3.943788263493807*^9},ExpressionUUID->"4e67347d-2281-46d4-984d-\
+4d7b40220340"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[CapitalOmega]", "=", 
+  RowBox[{"{", 
+   RowBox[{"\"\<a\>\"", ",", "\"\<b\>\"", ",", "\"\<c\>\""}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.9432021480880938`*^9, 3.943202159063218*^9}},
+ CellLabel->"In[27]:=",ExpressionUUID->"2f75f1ce-20a2-40c8-8b1f-3ef46d51328d"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"a\"\>", ",", "\<\"b\"\>", ",", "\<\"c\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.94320215990839*^9},
+ CellLabel->"Out[27]=",ExpressionUUID->"2bb78437-a8f2-4c9e-afa3-0587df6cdeb7"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Permute", "[", 
+  RowBox[{
+   RowBox[{"Permute", "[", 
+    RowBox[{"\[CapitalOmega]", ",", "a"}], "]"}], ",", "b"}], "]"}]], "Input",
+ CellChangeTimes->{{3.943202161039641*^9, 3.9432021707034683`*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"3310687d-856b-4860-98f7-062e593e03c2"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"\<\"b\"\>", ",", "\<\"c\"\>", ",", "\<\"a\"\>"}], "}"}]], "Output",
+ CellChangeTimes->{3.943202171341433*^9},
+ CellLabel->"Out[28]=",ExpressionUUID->"e26539bc-efab-4fff-a947-d89323560b13"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Analyse permutation groups", "Section",
+ CellChangeTimes->{{3.942898753717434*^9, 
+  3.9428987597950687`*^9}},ExpressionUUID->"d6ea8e3d-372f-894d-b870-\
+58bd50ccb705"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"a", " ", "=", " ", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", "=", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"c", "=", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"5", ",", "6"}], "}"}], "}"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["S", "4"], "=", 
+   RowBox[{"PermutationGroup", "[", 
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b"}], "}"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   SubscriptBox["G", "6"], "=", 
+   RowBox[{"PermutationGroup", "[", 
+    RowBox[{"{", 
+     RowBox[{"a", ",", "b", ",", "c"}], "}"}], "]"}]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.9428987796117*^9, 3.94289879430064*^9}, {
+   3.94289883433151*^9, 3.9428988774792233`*^9}, {3.942902209644834*^9, 
+   3.942902210677473*^9}, {3.942903282067078*^9, 3.942903298537001*^9}, 
+   3.942903691015817*^9, {3.943788355666356*^9, 3.943788381419532*^9}},
+ CellLabel->"In[6]:=",ExpressionUUID->"a954b017-d432-8843-80df-98c57b6ce74c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RandomPermutation", "[", 
+  RowBox[{"PermutationGroup", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Cycles", "[", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], ",", 
+     RowBox[{"Cycles", "[", 
+      RowBox[{"{", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]}], "}"}], "]"}], 
+  "]"}]], "Input",
+ NumberMarks->False,
+ CellLabel->"In[32]:=",ExpressionUUID->"fa0b3493-e7da-3544-a83a-863fb8218a47"],
+
+Cell[BoxData[
+ RowBox[{"Cycles", "[", 
+  RowBox[{"{", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]], "Output",
+ CellChangeTimes->{3.942899089574878*^9, 3.942903566027987*^9, 
+  3.942903689180729*^9, 3.942903979030254*^9, 3.9429292495920696`*^9, 
+  3.943788384353959*^9},
+ CellLabel->"Out[32]=",ExpressionUUID->"90dd0ac9-26b8-465c-8d9a-698261dc7ff8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GroupStabilizerChain", "[", 
+  SubscriptBox["S", "4"], "]"}]], "Input",
+ CellChangeTimes->{{3.9428991001699047`*^9, 3.942899107430172*^9}},
+ CellLabel->"In[33]:=",ExpressionUUID->"cec3319f-6ae7-fc47-87f0-f6580d6e68ac"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], 
+       ",", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}], ",", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "4", ",", "3"}], "}"}], "}"}], "]"}], ",", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", "4"}], "}"}], "}"}], "]"}]}], "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", "1", "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"2", ",", "4", ",", "3"}], "}"}], "}"}], "]"}], ",", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"3", ",", "4"}], "}"}], "}"}], "]"}]}], "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2"}], "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"3", ",", "4"}], "}"}], "}"}], "]"}], "}"}], "]"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "3"}], "}"}], "\[Rule]", 
+    RowBox[{"PermutationGroup", "[", 
+     RowBox[{"{", "}"}], "]"}]}]}], "}"}]], "Output",
+ CellChangeTimes->{3.94289910827462*^9, 3.9429028181913986`*^9, 
+  3.9429033112818623`*^9, 3.942903568095526*^9, 3.942903694001543*^9, 
+  3.9429039825830326`*^9, 3.942929253720949*^9, 3.943788386522896*^9},
+ CellLabel->"Out[33]=",ExpressionUUID->"1a00881d-5d66-4fd1-bd13-ac53edad3973"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GroupOrder", "[", 
+  SubscriptBox["S", "4"], "]"}]], "Input",
+ CellChangeTimes->{{3.942898918885788*^9, 3.94289892028698*^9}},
+ NumberMarks->False,
+ CellLabel->"In[34]:=",ExpressionUUID->"3f84a282-7ed0-c048-9fdf-7586927f83ae"],
+
+Cell[BoxData["24"], "Output",
+ CellChangeTimes->{{3.942898909866844*^9, 3.942898921373672*^9}, 
+   3.942903321695827*^9, 3.942903570527479*^9, 3.942903696357204*^9, 
+   3.942929256415758*^9, 3.9437883882640667`*^9},
+ CellLabel->"Out[34]=",ExpressionUUID->"bb4dd7cf-845c-494d-8f5e-c180c712d17b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CayleyGraph", "[", 
+  SubscriptBox["S", "4"], "]"}]], "Input",
+ CellChangeTimes->{{3.942898923427938*^9, 3.942898929947448*^9}},
+ CellLabel->"In[35]:=",ExpressionUUID->"538b5668-b61f-e740-a1a9-cdfad9cd2e15"],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+       20, 21, 22, 23, 
+      24}, {{{1, 10}, {1, 7}, {2, 9}, {2, 8}, {3, 12}, {3, 9}, {4, 11}, {4, 
+       10}, {5, 7}, {5, 11}, {6, 8}, {6, 12}, {7, 16}, {7, 1}, {8, 15}, {8, 
+       2}, {9, 18}, {9, 3}, {10, 17}, {10, 4}, {11, 13}, {11, 5}, {12, 14}, {
+       12, 6}, {13, 22}, {13, 15}, {14, 21}, {14, 16}, {15, 24}, {15, 13}, {
+       16, 23}, {16, 14}, {17, 19}, {17, 18}, {18, 20}, {18, 17}, {19, 1}, {
+       19, 21}, {20, 2}, {20, 22}, {21, 3}, {21, 19}, {22, 4}, {22, 20}, {23, 
+       5}, {23, 24}, {24, 6}, {24, 23}}, Null}, {
+      AnnotationRules -> {
+        DirectedEdge[15, 13] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[24, 6] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[10, 17] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[2, 8] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[22, 4] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[6, 12] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         14 -> {Tooltip -> Cycles[{{1, 3, 4, 2}}]}, 
+         DirectedEdge[7, 1] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[2, 9] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[14, 16] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[13, 15] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[12, 6] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[12, 14] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[8, 15] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         17 -> {Tooltip -> Cycles[{{1, 3}, {2, 4}}]}, 
+         21 -> {Tooltip -> Cycles[{{1, 4, 3}}]}, 
+         2 -> {Tooltip -> Cycles[{{3, 4}}]}, 
+         22 -> {Tooltip -> Cycles[{{1, 4}}]}, 
+         DirectedEdge[1, 7] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[4, 10] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[6, 8] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         19 -> {Tooltip -> Cycles[{{1, 4, 3, 2}}]}, 
+         20 -> {Tooltip -> Cycles[{{1, 4, 2}}]}, 
+         24 -> {Tooltip -> Cycles[{{1, 4}, {2, 3}}]}, 
+         DirectedEdge[21, 19] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         1 -> {Tooltip -> Cycles[{}]}, 
+         DirectedEdge[19, 1] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[24, 23] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         8 -> {Tooltip -> Cycles[{{1, 2}, {3, 4}}]}, 
+         DirectedEdge[20, 22] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[13, 22] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[3, 9] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         12 -> {Tooltip -> Cycles[{{1, 2, 4}}]}, 
+         DirectedEdge[23, 5] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         11 -> {Tooltip -> Cycles[{{1, 2, 4, 3}}]}, 
+         DirectedEdge[5, 7] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[5, 11] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[11, 5] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[7, 16] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[3, 12] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[9, 18] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[16, 23] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[22, 20] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[16, 14] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         6 -> {Tooltip -> Cycles[{{2, 4}}]}, 
+         DirectedEdge[14, 21] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         16 -> {Tooltip -> Cycles[{{1, 3, 4}}]}, 
+         DirectedEdge[17, 19] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[18, 20] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         9 -> {Tooltip -> Cycles[{{1, 2, 3}}]}, 
+         15 -> {Tooltip -> Cycles[{{1, 3}}]}, 
+         DirectedEdge[10, 4] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         3 -> {Tooltip -> Cycles[{{2, 3}}]}, 
+         DirectedEdge[17, 18] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[19, 21] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[20, 2] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         13 -> {Tooltip -> Cycles[{{1, 3, 2}}]}, 
+         DirectedEdge[11, 13] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         10 -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[9, 3] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[4, 11] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         DirectedEdge[18, 17] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[8, 2] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         DirectedEdge[23, 24] -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         23 -> {Tooltip -> Cycles[{{1, 4, 2, 3}}]}, 
+         DirectedEdge[1, 10] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         18 -> {Tooltip -> Cycles[{{1, 3, 2, 4}}]}, 
+         4 -> {Tooltip -> Cycles[{{2, 3, 4}}]}, 
+         DirectedEdge[15, 24] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}, 
+         7 -> {Tooltip -> Cycles[{{1, 2}}]}, 
+         5 -> {Tooltip -> Cycles[{{2, 4, 3}}]}, 
+         DirectedEdge[21, 3] -> {Tooltip -> Cycles[{{1, 2, 3, 4}}]}}, 
+       EdgeStyle -> {DirectedEdge[19, 21] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[11, 5] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[11, 13] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[18, 20] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[15, 13] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[1, 7] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[22, 4] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[8, 15] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[7, 16] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[7, 1] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[20, 2] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[6, 12] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[24, 23] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[13, 15] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[16, 23] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[5, 11] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[9, 3] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[19, 1] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[6, 8] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[12, 6] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[16, 14] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[14, 16] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[17, 19] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[15, 24] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[17, 18] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[2, 9] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[12, 14] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[2, 8] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[21, 19] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[4, 11] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[23, 24] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[5, 7] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[24, 6] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[18, 17] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[23, 5] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[13, 22] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[10, 17] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[9, 18] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[3, 12] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[3, 9] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[20, 22] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[8, 2] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[1, 10] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[10, 4] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[4, 10] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[22, 20] -> {
+           Hue[0.202127, 0.82, 0.62]}, DirectedEdge[21, 3] -> {
+           Hue[0.599116, 0.480955, 0.709798]}, DirectedEdge[14, 21] -> {
+           Hue[0.599116, 0.480955, 0.709798]}}}]]}, 
+    TagBox[GraphicsGroupBox[GraphicsComplexBox[CompressedData["
+1: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
+0/CWN7ppbWcSFJUkFSz1nYL/AW8G1Ek=
+       "], {
+        {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[0.02364279641428226], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              1, {1.8198171005091754`, -0.17758779539598604`}, 7}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{1, 10}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{2, {1.8956106124250705`, 3.339566485244075}, 8}],
+              0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{2, 9}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{3, {2.609264366601889, 3.0359192622053235`}, 9}],
+              0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{3, 12}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              4, {2.9048907253850222`, 0.7401160727208491}, 10}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{4, 11}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{5, 7}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{5, {0.9583541578455796, 0.797244117595186}, 11}],
+              0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{6, 8}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{6, {0.9877038693645166, 3.047314017745519}, 12}],
+              0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              7, {1.8288225250210144`, 0.20496976934741595`}, 1}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{7, 16}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              8, {1.9046981173447932`, 3.7224214172403522`}, 2}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{8, 15}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{9, {2.76375635816482, 2.7470377975044546`}, 3}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{9, 18}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              10, {2.7342605622556135`, 0.49664558253700725`}, 4}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{10, 17}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{11, {1.113852823416811, 0.5091198526181515}, 5}],
+              0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{11, 13}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              12, {0.8168067021378357, 2.8048554578972724`}, 6}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{12, 14}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              13, {1.0490138321409945`, 2.203751153834296}, 15}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{13, 22}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              14, {1.0093992089387458`, 1.1701278002003808`}, 16}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{14, 21}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              15, {1.3214133029784392`, 2.455018609567212}, 13}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{15, 24}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              16, {0.7278463912626522, 1.3413205432555804`}, 14}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{16, 23}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              17, {3.5145389042249664`, 1.7480087996474882`}, 18}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{17, 19}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              18, {3.8933286545417816`, 1.735386622452008}, 17}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{18, 20}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{19, 1}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              19, {2.400175060862776, 1.0920461799413397`}, 21}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{20, 2}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              20, {2.9935004751440597`, 2.202482400342956}, 22}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{21, 3}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              21, {2.6722220813327087`, 1.3438848226099962`}, 19}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{22, 4}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              22, {2.712227341476596, 2.3745752300926024`}, 20}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{23, 5}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              23, {-0.17082677085861564`, 1.807869576398552}, 24}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.599116, 0.480955, 0.709798], 
+            ArrowBox[{24, 6}, 0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[
+           {Hue[0.202127, 0.82, 0.62], 
+            ArrowBox[
+             BezierCurveBox[{
+              24, {0.20861924427001638`, 1.795440331267204}, 23}], 
+             0.03521001878138359]},
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ]}, 
+        {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[0.7]}], 
+         TagBox[
+          TooltipBox[DiskBox[1, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[2, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"3", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[3, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"2", ",", "3"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{2, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[4, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[5, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"2", ",", "4", ",", "3"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{2, 4, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[6, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"2", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{2, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[7, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[8, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{
+                 RowBox[{"{", 
+                   RowBox[{"1", ",", "2"}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"3", ",", "4"}], "}"}]}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2}, {3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[9, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[10, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[11, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "4", ",", "3"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 4, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[12, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "2", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 2, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[13, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "3", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[14, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "3", ",", "4", ",", "2"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3, 4, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[15, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "3"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[16, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "3", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[17, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{
+                 RowBox[{"{", 
+                   RowBox[{"1", ",", "3"}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"2", ",", "4"}], "}"}]}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3}, {2, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[18, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "3", ",", "2", ",", "4"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 3, 2, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[19, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "4", ",", "3", ",", "2"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4, 3, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[20, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "4", ",", "2"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4, 2}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[21, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "4", ",", "3"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[22, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "4"}], "}"}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[23, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{"{", 
+                 RowBox[{"1", ",", "4", ",", "2", ",", "3"}], "}"}], "}"}], 
+             "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4, 2, 3}}], "Tooltip"]& ], 
+         TagBox[
+          TooltipBox[DiskBox[24, 0.03521001878138359],
+           RowBox[{"Cycles", "[", 
+             RowBox[{"{", 
+               RowBox[{
+                 RowBox[{"{", 
+                   RowBox[{"1", ",", "4"}], "}"}], ",", 
+                 RowBox[{"{", 
+                   RowBox[{"2", ",", "3"}], "}"}]}], "}"}], "]"}]],
+          Annotation[#, 
+           Cycles[{{1, 4}, {2, 3}}], "Tooltip"]& ]}}]],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->"NetworkGraphics",
+  FormatType->TraditionalForm,
+  FrameTicks->None]], "Output",
+ CellChangeTimes->{3.942898930966856*^9, 3.942903324203159*^9, 
+  3.942903572648741*^9, 3.9429036987765102`*^9, 3.942929259363817*^9, 
+  3.943788390384074*^9},
+ CellLabel->"Out[35]=",ExpressionUUID->"6a667b79-eb39-494b-999d-5b77c386ef15"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GroupOrbits", "[", 
+  SubscriptBox["S", "4"], "]"}]], "Input",
+ CellChangeTimes->{{3.942899317846124*^9, 3.942899337084495*^9}, {
+  3.9429033726448174`*^9, 3.9429033777175655`*^9}, {3.942929290938738*^9, 
+  3.9429292922405643`*^9}},
+ CellLabel->"In[36]:=",ExpressionUUID->"78085082-995b-c44a-949a-489c48b17698"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.942899337776337*^9, {3.942903370808016*^9, 3.942903378371699*^9}, 
+   3.942903577396136*^9, 3.942903702853321*^9, 3.942929293110878*^9, 
+   3.943788393655787*^9},
+ CellLabel->"Out[36]=",ExpressionUUID->"9c5b1d18-7523-48f8-8b8e-0acf9d935af5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"GroupOrbits", "[", 
+  SubscriptBox["G", "6"], "]"}]], "Input",
+ CellChangeTimes->{{3.94378839582756*^9, 3.943788399931539*^9}},
+ CellLabel->"In[37]:=",ExpressionUUID->"0f1f645c-937c-4de7-86b2-3c94b861f261"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", "6"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.943788400456648*^9},
+ CellLabel->"Out[37]=",ExpressionUUID->"8121045e-58c6-490a-82d4-535255cdc32f"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Implement my own algorithms", "Section",
+ CellChangeTimes->{{3.943788304031562*^9, 
+  3.9437883105275393`*^9}},ExpressionUUID->"a90737e4-19fe-4965-807b-\
+d44d5cec6596"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Algorithm for the generation of the group orbits and the basic transversals\
+\>", "Subsection",
+ CellChangeTimes->{{3.9428994432159367`*^9, 
+  3.9428994785186977`*^9}},ExpressionUUID->"12334e4b-fabc-934f-8ef6-\
+735c4f005c86"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"\[CapitalOmega]", "=", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3", ",", "4", ",", "5", ",", "6"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"basicTransversals", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"generators", "=", 
+   RowBox[{"GroupGenerators", "[", 
+    SubscriptBox["G", "6"], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"orbits", " ", "=", " ", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"schreierVectors", "=", 
+   RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"inverseSchreierVectors", "=", 
+   RowBox[{"{", "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.942899498439527*^9, 3.9428995129622345`*^9}, {
+   3.942899620565231*^9, 3.942899643885107*^9}, 3.942899902279997*^9, {
+   3.942900155706301*^9, 3.942900263915748*^9}, {3.942900417425508*^9, 
+   3.942900427873375*^9}, {3.942900728813648*^9, 3.942900732606713*^9}, {
+   3.94290105700688*^9, 3.942901086907633*^9}, {3.942902353647283*^9, 
+   3.9429023676087704`*^9}, {3.942902918144697*^9, 3.942902918564953*^9}, {
+   3.942903384327467*^9, 3.942903385075449*^9}, {3.94290364961494*^9, 
+   3.942903674387427*^9}, {3.943788406547696*^9, 3.9437884246445847`*^9}, {
+   3.9437888874006653`*^9, 3.943788933530427*^9}, {3.9437890177343283`*^9, 
+   3.9437890180062227`*^9}, {3.943789878361717*^9, 3.943789888202083*^9}, {
+   3.943790150077507*^9, 3.943790156349371*^9}, {3.943790205752026*^9, 
+   3.943790206991803*^9}, {3.943794543724771*^9, 3.943794551003915*^9}},
+ CellLabel->
+  "In[193]:=",ExpressionUUID->"082a97d0-225d-0748-afc1-ed1db021d046"],
+
+Cell[BoxData[
+ RowBox[{"While", "[", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"Length", "[", "\[CapitalOmega]", "]"}], ">", "0"}], ",", 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"first", "=", 
+      RowBox[{"First", "[", "\[CapitalOmega]", "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{"orbit", "=", 
+      RowBox[{"{", "first", "}"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{"(*", 
+     RowBox[{
+      RowBox[{
+      "*", " ", "The", " ", "Schreier", " ", "vector", " ", "associates", " ",
+        "to", " ", "each", " ", "element", " ", "of", " ", "the", " ", 
+       "orbit", " ", "one", " ", "generator", " ", "of", " ", "G"}], ",", " ", 
+      RowBox[{
+      "from", " ", "which", " ", "the", " ", "coset", " ", "representative", 
+       " ", "can", " ", "be", " ", "computed"}]}], " ", "**)"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"schreierVector", "=", 
+     RowBox[{"Association", "[", 
+      RowBox[{"first", "->", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"inverseSchreierVector", "=", 
+     RowBox[{"Association", "[", 
+      RowBox[{"first", "->", 
+       RowBox[{"Cycles", "[", 
+        RowBox[{"{", "}"}], "]"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"nextElements", "=", 
+     RowBox[{"Association", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"#", "->", "#"}], "&"}], "/@", "generators"}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"transversals", " ", "=", 
+     RowBox[{"{", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}], "}"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"While", "[", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"Length", "[", "nextElements", "]"}], ">", "0"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+       RowBox[{
+        RowBox[{
+        "*", " ", "all", " ", "elements", " ", "of", " ", "nextElements", " ",
+          "are", " ", "applied", " ", "to", " ", "the", " ", "first", " ", 
+         "element", " ", "of", " ", "\[CapitalOmega]"}], ",", " ", 
+        RowBox[{
+        "if", " ", "the", " ", "image", " ", "is", " ", "not", " ", "part", 
+         " ", "of", " ", "the", " ", "orbit"}], ",", " ", 
+        RowBox[{
+        "a", " ", "map", " ", "is", " ", "created", " ", "between", " ", 
+         "the", " ", "image", " ", "and", " ", "the", " ", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"group", " ", "element"}], ",", 
+            RowBox[{"last", " ", "generator"}]}], ")"}], ".", " ", "The"}], 
+         " ", "last", " ", "generator", " ", "is", " ", "needed", " ", "for", 
+         " ", "the", " ", "Schreier", " ", "vector"}]}], " ", "**)"}], 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"nextParts", "=", 
+         RowBox[{"Association", "[", 
+          RowBox[{"Select", "[", 
+           RowBox[{
+            RowBox[{"KeyValueMap", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"PermutationReplace", "[", 
+                 RowBox[{"first", ",", "#1"}], "]"}], "->", 
+                RowBox[{"{", 
+                 RowBox[{"#1", ",", "#2"}], "}"}]}], "&"}], ",", 
+              "nextElements"}], "]"}], ",", 
+            RowBox[{
+             RowBox[{"And", "[", 
+              RowBox[{
+               RowBox[{"!", 
+                RowBox[{"MemberQ", "[", 
+                 RowBox[{"orbit", ",", 
+                  RowBox[{"#", "[", 
+                   RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], ",", 
+               RowBox[{"MemberQ", "[", 
+                RowBox[{"\[CapitalOmega]", ",", 
+                 RowBox[{"#", "[", 
+                  RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], "]"}], "&"}]}], 
+           "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"Echo", "[", 
+           RowBox[{"nextParts", ",", "\"\<nextParts\>\""}], "]"}], ";"}], 
+         "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"KeyValueMap", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"schreierVector", "[", "#1", "]"}], "=", 
+             RowBox[{"#2", "[", 
+              RowBox[{"[", "2", "]"}], "]"}]}], ")"}], "&"}], ",", 
+          "nextParts"}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"KeyValueMap", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"inverseSchreierVector", "[", "#1", "]"}], "=", 
+             RowBox[{"InversePermutation", "[", 
+              RowBox[{"#2", "[", 
+               RowBox[{"[", "2", "]"}], "]"}], "]"}]}], ")"}], "&"}], ",", 
+          "nextParts"}], "]"}], ";", "\[IndentingNewLine]", 
+        RowBox[{"(*", 
+         RowBox[{
+          RowBox[{"Echo", "[", 
+           RowBox[{"schreierVector", ",", "\"\<schreierVector\>\""}], "]"}], 
+          ";"}], "*)"}], "\[IndentingNewLine]", 
+        RowBox[{"orbit", "=", 
+         RowBox[{"Union", "[", 
+          RowBox[{"orbit", ",", 
+           RowBox[{"Keys", "[", "nextParts", "]"}]}], "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"transversals", " ", "=", " ", 
+         RowBox[{"Union", "[", 
+          RowBox[{"transversals", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"First", "[", "#", "]"}], "&"}], "/@", 
+            RowBox[{"Values", "[", "nextParts", "]"}]}]}], "]"}]}], ";"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{
+         RowBox[{
+         "*", " ", "compute", " ", "the", " ", "outer", " ", "product", " ", 
+          "of", " ", "all", " ", "active", " ", "group", " ", "elements", " ",
+           "with", " ", "generators"}], ",", " ", 
+         RowBox[{"remove", " ", "the", " ", "identity"}], ",", " ", 
+         RowBox[{"and", " ", 
+          RowBox[{"duplicates", ".", " ", "The"}], " ", "generator", " ", 
+          "is", " ", "kept", " ", "as", " ", "a", " ", "reference", " ", "to",
+           " ", "create", " ", "the", " ", "Schreier", " ", "vector"}]}], " ",
+         "**)"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"nextElements", " ", "=", 
+        RowBox[{"Association", "[", 
+         RowBox[{"Select", "[", 
+          RowBox[{
+           RowBox[{"Catenate", "[", 
+            RowBox[{"Outer", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"PermutationProduct", "[", 
+                 RowBox[{"#1", ",", "#2"}], "]"}], "->", "#2"}], "&"}], ",", 
+              RowBox[{
+               RowBox[{
+                RowBox[{"First", "[", "#", "]"}], "&"}], "/@", 
+               RowBox[{"Values", "[", "nextParts", "]"}]}], ",", 
+              "generators"}], "]"}], "]"}], ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}], "!=", 
+             RowBox[{"Cycles", "[", 
+              RowBox[{"{", "}"}], "]"}]}], "&"}]}], "]"}], "]"}]}], ";"}]}], 
+     "\[IndentingNewLine]", 
+     RowBox[{"(*", 
+      RowBox[{
+       RowBox[{"Echo", "[", 
+        RowBox[{"nextElements", ",", "\"\<nextElements\>\""}], "]"}], ";"}], 
+      "*)"}], "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"basicTransversals", ",", 
+      RowBox[{"orbit", "->", "transversals"}]}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"\[CapitalOmega]", "=", 
+     RowBox[{"Complement", "[", 
+      RowBox[{"\[CapitalOmega]", ",", "orbit"}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"orbits", ",", "orbit"}], "]"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"schreierVectors", ",", "schreierVector"}], "]"}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"AppendTo", "[", 
+     RowBox[{"inverseSchreierVectors", ",", "inverseSchreierVector"}], "]"}], 
+    ";"}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{{3.9428995651824093`*^9, 3.94289957208791*^9}, {
+   3.942899613784857*^9, 3.942899616560978*^9}, {3.942899651215946*^9, 
+   3.9428996886925945`*^9}, {3.942901040446003*^9, 3.9429010534980907`*^9}, 
+   3.942901097381645*^9, {3.942901455527996*^9, 3.942901549929468*^9}, {
+   3.942901596116427*^9, 3.9429016324487877`*^9}, {3.9429018107039585`*^9, 
+   3.94290184364608*^9}, {3.942902287764658*^9, 3.942902293709244*^9}, {
+   3.942902680475822*^9, 3.942902682292745*^9}, {3.9429027224756145`*^9, 
+   3.942902723110121*^9}, {3.9429028383254776`*^9, 3.942902861392807*^9}, {
+   3.942902899475736*^9, 3.942902930377857*^9}, {3.9429034261558676`*^9, 
+   3.9429035552871017`*^9}, {3.9429036288167915`*^9, 3.942903665509662*^9}, {
+   3.942903875601169*^9, 3.9429038927058353`*^9}, {3.942903953964491*^9, 
+   3.942903959432911*^9}, {3.9437886053169823`*^9, 3.943788686434222*^9}, {
+   3.943788826798286*^9, 3.943788877528594*^9}, {3.943788907657572*^9, 
+   3.943788975700185*^9}, {3.9437890088383703`*^9, 3.943789049263484*^9}, {
+   3.9437898946108723`*^9, 3.943789904835021*^9}, {3.943789972678321*^9, 
+   3.943790039944949*^9}, {3.943790089651318*^9, 3.943790114532299*^9}, {
+   3.943790168142585*^9, 3.9437901721583433`*^9}, {3.943790252074319*^9, 
+   3.9437904277608023`*^9}, {3.943790605034395*^9, 3.943790654323193*^9}, {
+   3.9437915163991413`*^9, 3.9437915539840927`*^9}, {3.943791594852517*^9, 
+   3.9437916105467577`*^9}, {3.94379167356609*^9, 3.9437916793255453`*^9}, {
+   3.9437917594821053`*^9, 3.943791769506034*^9}, {3.943791840957952*^9, 
+   3.9437918520055733`*^9}, {3.9437920339345207`*^9, 
+   3.9437920621749363`*^9}, {3.943792139363042*^9, 3.943792142490137*^9}, {
+   3.943792332978948*^9, 3.943792345131423*^9}, {3.943792385717421*^9, 
+   3.943792388141324*^9}, {3.943792466120861*^9, 3.943792469560392*^9}, {
+   3.943792545662739*^9, 3.943792546060648*^9}, {3.943792594725972*^9, 
+   3.943792683977436*^9}, {3.943792740445402*^9, 3.9437927981904*^9}, {
+   3.943792837136506*^9, 3.943792884224525*^9}, {3.9437929190420303`*^9, 
+   3.943792957141169*^9}, {3.943793075163295*^9, 3.943793075930271*^9}, {
+   3.943793169687454*^9, 3.943793229217319*^9}, {3.943793299101102*^9, 
+   3.943793331836822*^9}, {3.943793393848214*^9, 3.943793463514523*^9}, {
+   3.943793505534112*^9, 3.943793534370309*^9}, {3.943794554541411*^9, 
+   3.9437945585167227`*^9}, {3.94379460005499*^9, 3.943794706771084*^9}},
+ CellLabel->
+  "In[199]:=",ExpressionUUID->"507b70dd-60a8-c74b-8974-ce22401a58f1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["schreierVectors"], "Input",
+ CellChangeTimes->{{3.9437903371651793`*^9, 3.943790339365184*^9}, 
+   3.943790389143833*^9},
+ CellLabel->
+  "In[200]:=",ExpressionUUID->"b4c8248d-847a-49ba-9894-63a922c81e51"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"1", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", 
+     RowBox[{"2", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]}], ",", 
+     RowBox[{"3", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}]}], 
+     ",", 
+     RowBox[{"4", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "}"}], "]"}]}]}],
+     "\[RightAssociation]"}], ",", 
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"5", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", 
+     RowBox[{"6", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "6"}], "}"}], "}"}], "]"}]}]}], 
+    "\[RightAssociation]"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.943790339963381*^9, 3.943790389686768*^9, 3.9437904352870073`*^9, 
+   3.943792154410074*^9, 3.943792892042837*^9, 3.9437934782822104`*^9, 
+   3.9437935157581367`*^9, {3.943794691252108*^9, 3.943794715435611*^9}},
+ CellLabel->
+  "Out[200]=",ExpressionUUID->"580ebee1-63c1-405a-92f6-cf1a7ce19352"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["inverseSchreierVectors"], "Input",
+ CellChangeTimes->{{3.943794718123702*^9, 3.943794719707118*^9}},
+ CellLabel->
+  "In[201]:=",ExpressionUUID->"8c6e64b7-4d41-4619-b48f-0cd7c5dac239"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"1", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", 
+     RowBox[{"2", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}]}], ",", 
+     RowBox[{"3", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "4", ",", "3", ",", "2"}], "}"}], "}"}], "]"}]}], 
+     ",", 
+     RowBox[{"4", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "4", ",", "3", ",", "2"}], "}"}], "}"}], "]"}]}]}],
+     "\[RightAssociation]"}], ",", 
+   RowBox[{"\[LeftAssociation]", 
+    RowBox[{
+     RowBox[{"5", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ",", 
+     RowBox[{"6", "\[Rule]", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "6"}], "}"}], "}"}], "]"}]}]}], 
+    "\[RightAssociation]"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.943794720697069*^9},
+ CellLabel->
+  "Out[201]=",ExpressionUUID->"a3a5ef7e-219e-4087-bd74-639abb1a961b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["basicTransversals"], "Input",
+ CellChangeTimes->{{3.9429029410340824`*^9, 3.942902944863031*^9}, {
+  3.942903589463049*^9, 3.942903597046829*^9}},
+ CellLabel->
+  "In[202]:=",ExpressionUUID->"6d28d18c-f5f6-2440-ab3b-bbfa3a43e60d"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}], ",", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}], ",", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], ",", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "4", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]}], 
+     "}"}]}], ",", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"5", ",", "6"}], "}"}], "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}], ",", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "6"}], "}"}], "}"}], "]"}]}], "}"}]}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.942903597607792*^9, 3.942903611412504*^9}, {
+   3.9429037101373587`*^9, 3.942903758306168*^9}, {3.942903800636322*^9, 
+   3.9429038210191784`*^9}, {3.942903902057287*^9, 3.942903906196535*^9}, 
+   3.942903989072321*^9, {3.942904030936907*^9, 3.942904035279579*^9}, 
+   3.9429293058153*^9, 3.9429293906331177`*^9, 3.9437883352902203`*^9, 
+   3.9437884328144503`*^9, 3.9437889830821657`*^9, {3.94378902565186*^9, 
+   3.943789054159148*^9}, 3.943790122194111*^9, 3.943790461961049*^9, 
+   3.943792894761517*^9, 3.9437934838837976`*^9, 3.94379351723697*^9, 
+   3.943794725330524*^9},
+ CellLabel->
+  "Out[202]=",ExpressionUUID->"7ee9c0bc-96f3-4312-9eb8-894d91be7800"]
+}, Open  ]],
+
+Cell["\<\
+The idea of the Schreier vector: It is cheaper to store the reference to a \
+generator than to store an arbitrary group element. It is possible to \
+re-compute the transversal representative from the Schreier vector. This is \
+done by the following algorithm\
+\>", "Text",
+ CellChangeTimes->{{3.943793555781698*^9, 
+  3.943793633248374*^9}},ExpressionUUID->"858796b4-0339-435b-a694-\
+60259c9fc8fa"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"orbitElementRepresentative", "[", 
+   RowBox[{"\[Delta]_", ",", "orbit_", ",", "schreierVector_"}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\[Gamma]", ",", "r", ",", "g"}], "}"}], ",", 
+    "\[IndentingNewLine]", "\t", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"orbit", ",", "\[Delta]"}], "]"}]}], ",", 
+       RowBox[{
+       "Return", "[", "\"\<element is not part of the orbit\>\"", "]"}]}], 
+      "]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"orbit", "!=", 
+        RowBox[{"Keys", "[", "schreierVector", "]"}]}], ",", 
+       RowBox[{"Return", "[", "\"\<incompatible Schreier vector\>\"", "]"}]}],
+       "]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"\[Gamma]", "=", "\[Delta]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"r", "=", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{"\[Gamma]", "!=", 
+        RowBox[{"First", "[", "orbit", "]"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"schreierVector", "[", "\[Gamma]", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"r", "=", 
+         RowBox[{"PermutationProduct", "[", 
+          RowBox[{"g", ",", "r"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"\[Gamma]", "=", 
+         RowBox[{"PermutationReplace", "[", 
+          RowBox[{"\[Gamma]", ",", 
+           RowBox[{"InversePermutation", "[", "g", "]"}]}], "]"}]}]}]}], 
+      "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Return", "[", "r", "]"}], ";"}]}], "\[IndentingNewLine]", 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.943793742908807*^9, 3.9437941013784122`*^9}, {
+  3.943794199534985*^9, 3.943794200926424*^9}, {3.9437942950184298`*^9, 
+  3.94379430738659*^9}, {3.94379450067476*^9, 3.943794502754492*^9}},
+ CellLabel->
+  "In[203]:=",ExpressionUUID->"aba88a55-ba0c-4c91-ab30-9846744c8636"],
+
+Cell["\<\
+The algorithm can be made more efficient, when the inverses of the Schreier \
+vector are used. Then only the final representative has to be inverted. \
+\>", "Text",
+ CellChangeTimes->{{3.943794882417685*^9, 
+  3.9437949217708387`*^9}},ExpressionUUID->"5df63cb9-3cfd-492c-b8b7-\
+c4af60c3ecd3"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"orbitElementRepresentative2", "[", 
+   RowBox[{"\[Delta]_", ",", "orbit_", ",", "inverseSchreierVector_"}], "]"}],
+   ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"\[Gamma]", ",", "r", ",", "g"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"orbit", ",", "\[Delta]"}], "]"}]}], ",", 
+       RowBox[{
+       "Return", "[", "\"\<element is not part of the orbit\>\"", "]"}]}], 
+      "]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"orbit", "!=", 
+        RowBox[{"Keys", "[", "inverseSchreierVector", "]"}]}], ",", 
+       RowBox[{"Return", "[", "\"\<incompatible Schreier vector\>\"", "]"}]}],
+       "]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"\[Gamma]", "=", "\[Delta]"}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"r", "=", 
+      RowBox[{"Cycles", "[", 
+       RowBox[{"{", "}"}], "]"}]}], ";", "\[IndentingNewLine]", "\t", 
+     RowBox[{"While", "[", 
+      RowBox[{
+       RowBox[{"\[Gamma]", "!=", 
+        RowBox[{"First", "[", "orbit", "]"}]}], ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"g", "=", 
+         RowBox[{"inverseSchreierVector", "[", "\[Gamma]", "]"}]}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"r", "=", 
+         RowBox[{"PermutationProduct", "[", 
+          RowBox[{"r", ",", "g"}], "]"}]}], ";", "\[IndentingNewLine]", 
+        RowBox[{"\[Gamma]", "=", 
+         RowBox[{"PermutationReplace", "[", 
+          RowBox[{"\[Gamma]", ",", "g"}], "]"}]}]}]}], "\[IndentingNewLine]", 
+      "]"}], ";", "\[IndentingNewLine]", 
+     RowBox[{"Return", "[", 
+      RowBox[{"InversePermutation", "[", "r", "]"}], "]"}], ";"}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.943794730147909*^9, 3.943794812798943*^9}, {
+  3.943794847464869*^9, 3.9437948633050013`*^9}},
+ CellLabel->
+  "In[208]:=",ExpressionUUID->"07f82a01-bbbb-407a-a880-f38e79159b86"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["orbits"], "Input",
+ CellChangeTimes->{{3.943794229950883*^9, 3.943794230935444*^9}},
+ CellLabel->
+  "In[176]:=",ExpressionUUID->"89a05949-1763-4e89-b18c-715d4fc3657c"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", "2", ",", "3", ",", "4"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", "6"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.943794232325441*^9, 3.94379450774478*^9},
+ CellLabel->
+  "Out[176]=",ExpressionUUID->"453a44e2-76eb-4bbc-b360-a69d48613ee9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"basicTransversals", "[", 
+   RowBox[{"[", "1", "]"}], "]"}], "[", 
+  RowBox[{"[", "2", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.943806503997137*^9, 3.943806535446106*^9}},
+ CellLabel->
+  "In[212]:=",ExpressionUUID->"4082d3a2-8194-46fe-b65f-a52bb3c9a3be"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "4", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.943806510427657*^9, 3.9438065359738827`*^9}},
+ CellLabel->
+  "Out[212]=",ExpressionUUID->"4999b6fc-6b48-41a8-8f74-31a9326a2ded"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"orbitElementRepresentative", "[", 
+    RowBox[{"#", ",", 
+     RowBox[{"orbits", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"schreierVectors", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "&"}], "/@", 
+  RowBox[{"orbits", "[", 
+   RowBox[{"[", "1", "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.94379421157533*^9, 3.943794248728183*^9}},
+ CellLabel->
+  "In[177]:=",ExpressionUUID->"4f82c54e-614a-494e-89c4-d778c81c8403"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "4", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{
+  3.943794249684905*^9, {3.943794299136916*^9, 3.9437943102325697`*^9}, 
+   3.943794508889085*^9},
+ CellLabel->
+  "Out[177]=",ExpressionUUID->"82955881-4494-414c-b624-e5346a695dcb"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"orbitElementRepresentative2", "[", 
+    RowBox[{"#", ",", 
+     RowBox[{"orbits", "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", 
+     RowBox[{"inverseSchreierVectors", "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], "]"}], "&"}], "/@", 
+  RowBox[{"orbits", "[", 
+   RowBox[{"[", "1", "]"}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.9437948201753063`*^9, 3.943794839927659*^9}},
+ CellLabel->
+  "In[209]:=",ExpressionUUID->"fd051e42-659e-47fd-b49d-fa56d3d4dc68"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3", ",", "4"}], "}"}], "}"}], "]"}], ",", 
+   RowBox[{"Cycles", "[", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "4", ",", "2", ",", "3"}], "}"}], "}"}], "]"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.943794841132522*^9, 3.94379486619044*^9}},
+ CellLabel->
+  "Out[209]=",ExpressionUUID->"b061453b-6181-4559-8b8b-fbee38c1fa9e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1357.5, 831.75},
+WindowMargins->{{Automatic, 266.25}, {63.75, Automatic}},
+FrontEndVersion->"13.3 for Linux x86 (64-bit) (July 27, 2023)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"77afce70-aae9-8347-b4a6-84f526a2c99e"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[561, 20, 374, 7, 58, "Text",ExpressionUUID->"6671adf3-49a8-460a-b15b-835612ab4d14"],
+Cell[CellGroupData[{
+Cell[960, 31, 167, 3, 67, "Section",ExpressionUUID->"ac85f72b-f645-4d35-a926-02bf4d4d67eb"],
+Cell[1130, 36, 2673, 67, 62, "Text",ExpressionUUID->"6fc89b8e-a771-4276-ae5d-3bef4ef6ec75"],
+Cell[CellGroupData[{
+Cell[3828, 107, 896, 25, 110, "Input",ExpressionUUID->"b34f4a73-054c-4a49-a94f-19bd28902c06"],
+Cell[4727, 134, 338, 7, 33, "Output",ExpressionUUID->"a570a7d3-9203-4e56-a068-e521cd646a87"],
+Cell[5068, 143, 338, 7, 33, "Output",ExpressionUUID->"3a928523-8267-46fd-84cf-e2298297f0bc"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5443, 155, 518, 12, 50, "Input",ExpressionUUID->"785c388e-f671-460e-b5e8-e85091f20591"],
+Cell[5964, 169, 228, 4, 33, "Output",ExpressionUUID->"8bc5e98c-a098-4394-8c27-20b2e79b443a"],
+Cell[6195, 175, 228, 4, 33, "Output",ExpressionUUID->"71455b86-dd47-4406-9b5d-80b381034084"]
+}, Open  ]],
+Cell[6438, 182, 479, 9, 58, "Text",ExpressionUUID->"4e67347d-2281-46d4-984d-4d7b40220340"],
+Cell[CellGroupData[{
+Cell[6942, 195, 295, 6, 29, "Input",ExpressionUUID->"2f75f1ce-20a2-40c8-8b1f-3ef46d51328d"],
+Cell[7240, 203, 227, 4, 33, "Output",ExpressionUUID->"2bb78437-a8f2-4c9e-afa3-0587df6cdeb7"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7504, 212, 304, 6, 29, "Input",ExpressionUUID->"3310687d-856b-4860-98f7-062e593e03c2"],
+Cell[7811, 220, 228, 4, 33, "Output",ExpressionUUID->"e26539bc-efab-4fff-a947-d89323560b13"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8088, 230, 173, 3, 53, "Section",ExpressionUUID->"d6ea8e3d-372f-894d-b870-58bd50ccb705"],
+Cell[8264, 235, 1284, 37, 127, "Code",ExpressionUUID->"a954b017-d432-8843-80df-98c57b6ce74c"],
+Cell[CellGroupData[{
+Cell[9573, 276, 525, 15, 29, "Input",ExpressionUUID->"fa0b3493-e7da-3544-a83a-863fb8218a47"],
+Cell[10101, 293, 381, 8, 33, "Output",ExpressionUUID->"90dd0ac9-26b8-465c-8d9a-698261dc7ff8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10519, 306, 242, 4, 29, "Input",ExpressionUUID->"cec3319f-6ae7-fc47-87f0-f6580d6e68ac"],
+Cell[10764, 312, 1949, 55, 54, "Output",ExpressionUUID->"1a00881d-5d66-4fd1-bd13-ac53edad3973"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12750, 372, 250, 5, 29, "Input",ExpressionUUID->"3f84a282-7ed0-c048-9fdf-7586927f83ae"],
+Cell[13003, 379, 294, 4, 33, "Output",ExpressionUUID->"bb4dd7cf-845c-494d-8f5e-c180c712d17b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[13334, 388, 231, 4, 29, "Input",ExpressionUUID->"538b5668-b61f-e740-a1a9-cdfad9cd2e15"],
+Cell[13568, 394, 46063, 1062, 362, "Output",ExpressionUUID->"6a667b79-eb39-494b-999d-5b77c386ef15"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[59668, 1461, 335, 6, 29, "Input",ExpressionUUID->"78085082-995b-c44a-949a-489c48b17698"],
+Cell[60006, 1469, 383, 8, 33, "Output",ExpressionUUID->"9c5b1d18-7523-48f8-8b8e-0acf9d935af5"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[60426, 1482, 230, 4, 29, "Input",ExpressionUUID->"0f1f645c-937c-4de7-86b2-3c94b861f261"],
+Cell[60659, 1488, 312, 8, 33, "Output",ExpressionUUID->"8121045e-58c6-490a-82d4-535255cdc32f"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[61020, 1502, 174, 3, 67, "Section",ExpressionUUID->"a90737e4-19fe-4965-807b-d44d5cec6596"],
+Cell[CellGroupData[{
+Cell[61219, 1509, 235, 5, 54, "Subsection",ExpressionUUID->"12334e4b-fabc-934f-8ef6-735c4f005c86"],
+Cell[61457, 1516, 1694, 35, 130, "Input",ExpressionUUID->"082a97d0-225d-0748-afc1-ed1db021d046"],
+Cell[63154, 1553, 10490, 228, 602, "Input",ExpressionUUID->"507b70dd-60a8-c74b-8974-ce22401a58f1"],
+Cell[CellGroupData[{
+Cell[73669, 1785, 218, 4, 29, "Input",ExpressionUUID->"b4c8248d-847a-49ba-9894-63a922c81e51"],
+Cell[73890, 1791, 1445, 41, 33, "Output",ExpressionUUID->"580ebee1-63c1-405a-92f6-cf1a7ce19352"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[75372, 1837, 197, 3, 29, "Input",ExpressionUUID->"8c6e64b7-4d41-4619-b48f-0cd7c5dac239"],
+Cell[75572, 1842, 1250, 38, 33, "Output",ExpressionUUID->"a3a5ef7e-219e-4087-bd74-639abb1a961b"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[76859, 1885, 243, 4, 29, "Input",ExpressionUUID->"6d28d18c-f5f6-2440-ab3b-bbfa3a43e60d"],
+Cell[77105, 1891, 1717, 45, 33, "Output",ExpressionUUID->"7ee9c0bc-96f3-4312-9eb8-894d91be7800"]
+}, Open  ]],
+Cell[78837, 1939, 408, 8, 58, "Text",ExpressionUUID->"858796b4-0339-435b-a694-60259c9fc8fa"],
+Cell[79248, 1949, 2155, 50, 259, "Input",ExpressionUUID->"aba88a55-ba0c-4c91-ab30-9846744c8636"],
+Cell[81406, 2001, 302, 6, 35, "Text",ExpressionUUID->"5df63cb9-3cfd-492c-b8b7-c4af60c3ecd3"],
+Cell[81711, 2009, 2051, 50, 239, "Input",ExpressionUUID->"07f82a01-bbbb-407a-a880-f38e79159b86"],
+Cell[CellGroupData[{
+Cell[83787, 2063, 181, 3, 29, "Input",ExpressionUUID->"89a05949-1763-4e89-b18c-715d4fc3657c"],
+Cell[83971, 2068, 337, 9, 33, "Output",ExpressionUUID->"453a44e2-76eb-4bbc-b360-a69d48613ee9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[84345, 2082, 294, 7, 29, "Input",ExpressionUUID->"4082d3a2-8194-46fe-b65f-a52bb3c9a3be"],
+Cell[84642, 2091, 667, 20, 33, "Output",ExpressionUUID->"4999b6fc-6b48-41a8-8f74-31a9326a2ded"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[85346, 2116, 497, 13, 29, "Input",ExpressionUUID->"4f82c54e-614a-494e-89c4-d778c81c8403"],
+Cell[85846, 2131, 718, 22, 33, "Output",ExpressionUUID->"82955881-4494-414c-b624-e5346a695dcb"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[86601, 2158, 508, 13, 29, "Input",ExpressionUUID->"fd051e42-659e-47fd-b49d-fa56d3d4dc68"],
+Cell[87112, 2173, 664, 20, 33, "Output",ExpressionUUID->"b061453b-6181-4559-8b8b-fbee38c1fa9e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
