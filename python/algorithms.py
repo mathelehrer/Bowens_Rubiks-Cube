@@ -12,5 +12,13 @@ def learn():
     print("Strong generators: ",G.strong_gens)
     print("Elements: ",G.elements)
 
+
+def understand_order_computation():
+    a = Permutation(1, 2, 3)
+    b = Permutation(1, 2)(3, 4)
+    G = PermutationGroup(a, b)
+    print(G.order())
+
 if __name__ == '__main__':
-    learn()
+    #learn()
+    understand_order_computation()
